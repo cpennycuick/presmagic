@@ -1,0 +1,88 @@
+#MainMenu {
+	background-color: #D0D0D0;
+	height: 31px;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 1000;
+	width: 100%;
+	border-bottom: 1px solid #AAA;
+}
+#MainMenu ul, #MainMenu ul > li {
+	padding: 0px;
+	margin: 0px;
+}
+#MainMenu ul > li {
+	list-style: none;
+}
+
+#MainMenu > ul > li {
+	float: left;
+}
+
+#MainMenu > ul > li > .Item {
+	line-height: 31px;
+	height: 31px;
+	vertical-align: middle;
+	padding: 0px 10px;
+	cursor: pointer;
+}
+#MainMenu > ul > li > .Item:hover {
+	background-color: #DADADA;
+}
+#MainMenu > ul > li.Open > .Item,
+#MainMenu .SubMenu {
+	background-color: #E0E0E0;
+}
+
+#MainMenu .SubMenu {
+	display: none;
+	position: absolute;
+	top: 31px;
+	left: 0px;
+	width: 100%;
+	padding: 0px 6px 12px 6px;
+	border-bottom: 1px solid #AAA;
+}
+#MainMenu > ul > li.Open .SubMenu {
+	display: block;
+}
+#MainMenu .SubMenu .Group {
+	float: left;
+	min-width: 250px;
+	padding: 0px 6px;
+}
+#MainMenu .SubMenu .Group > .GroupText {
+	font-size: 120%;
+	font-weight: bold;
+	padding: 8px 0px 2px 12px;
+}
+#MainMenu .SubMenu ul > li {
+	padding: 0px 6px;
+	padding-left: 29px;
+	line-height: 24px;
+	height: 24px;
+	cursor: pointer;
+	position: relative;
+}
+#MainMenu .SubMenu ul > li .Text:before {
+	content: "";
+	position: absolute;
+	top: 0px;
+	left: 25px;
+	width: 0px;
+	border-left: 1px solid #BBB;
+	height: 100%;
+}
+#MainMenu .SubMenu ul > li:hover {
+	background-color: #D0D0D0;
+}
+#MainMenu .SubMenu .Icon {
+	width: 20px;
+	height: 20px;
+	margin: 2px;
+	background-color: red;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}

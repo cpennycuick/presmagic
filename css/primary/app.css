@@ -1,0 +1,40 @@
+html, body {
+	padding: 0px;
+	margin: 0px;
+	min-width: 600px;
+	min-height: 400px;
+	height: 100%;
+}
+
+table, td, div, span, p { padding: 0px; margin: 0px; }
+
+#Content {
+	width: 100%;
+	max-width: 100%;
+	min-width: 100%;
+	overflow: hidden;
+	background-color: #EEE;
+	position: fixed;
+	top: 32px;
+	left: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+table.Layout td.VerticalLayoutDivider {
+	width: 3px;
+	max-width: 3px;
+	border: 1px solid #AAA;
+	border-width: 0px 1px;
+	background-color: #CCC;
+	cursor: ew-resize;
+}
+
+table.Layout td.HorizontalLayoutDivider {
+	height: 3px;
+	max-height: 3px;
+	border: 1px solid #AAA;
+	border-width: 1px 0px;
+	background-color: #CCC;
+	cursor: ns-resize;
+}
