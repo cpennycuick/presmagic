@@ -78,12 +78,6 @@ define(['events', 'style!css/app'], function (events) {
 			});
 		});
 
-		menu.add('Windows', function () {
-			this.add('Video', function () {
-				this.add('Load File');
-			});
-		});
-
 		menu.add('Help', function () {
 			this.add('Help', function () {
 				this.add('Contents');

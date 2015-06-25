@@ -22,14 +22,14 @@ chrome.app.runtime.onLaunched.addListener(function() {
 						height: 600
 					},
 //					frame: 'none',
-//					alwaysOnTopWindows: true, // dev channel
+//					alwaysOnTopWindows: true,
 //					outerBounds: display.bounds,
 					resizable: false
 				}, function (createdWindow) {
 //					createdWindow.fullscreen();
-					createdWindow.onClosed.addListener(function () {
-						closeRemainingWindows(createdWindow);
-					});
+//					createdWindow.onClosed.addListener(function () {
+//						closeRemainingWindows(createdWindow);
+//					});
 				});
 
 				break;
