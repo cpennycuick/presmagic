@@ -8,8 +8,7 @@
 		}
 	},
 	"permissions": [
-		"system.display",
-		"app.window"
+		"system.display"
 	],
 
 	"offline_enabled": true,

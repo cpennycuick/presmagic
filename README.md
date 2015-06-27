@@ -1,9 +1,8 @@
 # PresMagic
-Presenter Magic: Presenter and lyric software built as a Chrome Application.
+Presenter Magic: Presenter and lyric software built as a Chrome Application.  
 Website coming soon...
 
-Project Management - for features / bugs
-https://trello.com/b/VlYfchYj/presmagic
+Project Management - for features / bugs: https://trello.com/b/VlYfchYj/presmagic
 
 ## Installation
 1. Turn "Developer mode" on.

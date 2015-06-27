@@ -26,7 +26,9 @@ define(function () {
 					.unbind('mousemove.dragable'+draggingEventID)
 					.unbind('mouseup.dragable'+draggingEventID);
 
-				reset && reset.call(start, $element, $handle);
+				if (reset) {
+					reset.call(start, $element, $handle);
+				}
 			});
 		});
 	};

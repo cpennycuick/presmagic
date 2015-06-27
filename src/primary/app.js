@@ -1,4 +1,4 @@
-define(['events', 'style!css/app'], function (events) {
+define(['app/events'], function (events) {
 
 	var app = {};
 
@@ -11,10 +11,9 @@ define(['events', 'style!css/app'], function (events) {
 
 	app.event = events;
 
-	app.loadPanel = function (name, $container) {
-		app.event.trigger(app.EVENT_PANEL_PRELOAD, {Name: name});
-		require([name], function (panelClass) {
-			(new panelClass($container)).run();
+	app.init = function () {
+		$(function () {
+			app.start();
 		});
 	};
 
@@ -29,7 +28,19 @@ define(['events', 'style!css/app'], function (events) {
 
 		app.event.trigger(app.EVENT_APPLICATION_START);
 
-		app.loadPanel('panel/main', $('#Content'));
+		loadComponents();
+//		app.loadPanel('panel/main', $('#Content'));
+	};
+
+	app.loadPanel = function (name, $container) {
+		var defer = Q.defer();
+
+		app.event.trigger(app.EVENT_PANEL_PRELOAD, {Name: name});
+		require([name], function (panelClass) {
+			defer.resolve(new panelClass($container));
+		});
+
+		return defer.promise;
 	};
 
 	function bindEvents() {
@@ -82,6 +93,24 @@ define(['events', 'style!css/app'], function (events) {
 			this.add('Help', function () {
 				this.add('Contents');
 				this.add('About');
+			});
+		});
+	}
+
+	function loadComponents() {
+		require(['text!components.json'], function (componentsJSON) {
+			var components = JSON.parse(componentsJSON);
+
+			var componentPaths = [];
+			components.forEach(function (componentName) {
+				componentPaths.push('components/'+componentName+'/'+componentName);
+			});
+
+			require(componentPaths, function () {
+				Array.prototype.slice.call(arguments).forEach(function (componentClass) {
+					var c = (new componentClass());
+					c.register();
+				});
 			});
 		});
 	}
