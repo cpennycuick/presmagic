@@ -56,9 +56,10 @@ define(['style!mainmenu'], function () {
 	Menu.prototype._openMenu = function ($root, $li) {
 		$li.addClass('Open');
 
+		var self = this;
 		$('body').on('click.topmenu', function (event) {
 			if (!$.contains($root[0], event.target)) {
-				closeAll($root);
+				self._closeAll($root);
 			}
 		});
 	}

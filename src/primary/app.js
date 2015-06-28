@@ -12,14 +12,18 @@ define(['app/events'], function (events) {
 	app.event = events;
 
 	app.init = function () {
-		$(function () {
-			app.start();
-		});
+		return Q()
+			.then(loadClasses)
+			.then(loadComponents)
+			.then(function () {
+				$(function () {
+					app.start();
+				});
+			});
 	};
 
 	app.start = function () {
 		bindEvents();
-		loadMainMenu();
 
 		app.event.trigger(app.EVENT_WINDOW_CHANGE, {
 			type: 'load',
@@ -27,14 +31,11 @@ define(['app/events'], function (events) {
 		});
 
 		app.event.trigger(app.EVENT_APPLICATION_START);
-
-		loadComponents();
-//		app.loadPanel('panel/main', $('#Content'));
 	};
 
 	app.loadPanel = function (name, $container) {
 		var defer = Q.defer();
-
+		
 		app.event.trigger(app.EVENT_PANEL_PRELOAD, {Name: name});
 		require([name], function (panelClass) {
 			defer.resolve(new panelClass($container));
@@ -42,6 +43,55 @@ define(['app/events'], function (events) {
 
 		return defer.promise;
 	};
+	
+	function loadClasses() {
+		app.classes = {};
+
+		var classPathMapClassName = {
+			'app/events': 'Events',
+			'app/component': 'Component'
+		};
+		
+		var defer = Q.defer();
+		
+		var classPaths = Object.keys(classPathMapClassName);
+		require(classPaths, function () {
+			var args = Array.prototype.slice.call(arguments);
+			args.forEach(function (clss, index) {
+				var className = classPathMapClassName[classPaths[index]];
+				app.classes[className] = clss;
+			});
+			
+			defer.resolve();
+		});
+		
+		return defer.promise;
+	}
+
+	function loadComponents() {
+		var defer = Q.defer();
+
+		require(['text!components.json'], function (componentsJSON) {
+			var components = JSON.parse(componentsJSON);
+
+			var componentPaths = [];
+			components.forEach(function (componentName) {
+				componentPaths.push('components/'+componentName+'/'+componentName);
+			});
+
+			require(componentPaths, function () {
+				var args = Array.prototype.slice.call(arguments);
+				args.forEach(function (componentClass) {
+					var c = (new componentClass());
+					c.register();
+				});
+
+				defer.resolve();
+			});
+		});
+		
+		return defer.promise;
+	}
 
 	function bindEvents() {
 		$(window).resize(function (event) {
@@ -57,61 +107,6 @@ define(['app/events'], function (events) {
 			if (data.type === 'load' || data.type === 'resize') {
 				$content.height(window.innerHeight - menuHeight);
 			}
-		});
-	}
-
-	function loadMainMenu() {
-		require(['app/mainmenu'], function (MainMenu) {
-			var menu = new MainMenu();
-			setupMenu(menu);
-
-			$('#MainMenu').append(menu.render());
-		});
-	}
-
-	function setupMenu(menu) {
-		menu.add('File', function () {
-			this.add('Application', function () {
-				this.add('Preferences');
-				this.add('Exit', null, function () {
-					chrome.app.window.current().close();
-				});
-			});
-			this.add('Advanced', function () {
-				this.add('Stage Display');
-				this.add('Remote Control');
-			});
-		});
-
-		menu.add('Media', function () {
-			this.add('Video', function () {
-				this.add('Load File');
-			});
-		});
-
-		menu.add('Help', function () {
-			this.add('Help', function () {
-				this.add('Contents');
-				this.add('About');
-			});
-		});
-	}
-
-	function loadComponents() {
-		require(['text!components.json'], function (componentsJSON) {
-			var components = JSON.parse(componentsJSON);
-
-			var componentPaths = [];
-			components.forEach(function (componentName) {
-				componentPaths.push('components/'+componentName+'/'+componentName);
-			});
-
-			require(componentPaths, function () {
-				Array.prototype.slice.call(arguments).forEach(function (componentClass) {
-					var c = (new componentClass());
-					c.register();
-				});
-			});
 		});
 	}
 
