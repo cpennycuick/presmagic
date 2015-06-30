@@ -9,10 +9,40 @@ requirejs.config({
 	}
 });
 
-requirejs(['jquery', 'Q', 'app', 'style!primary'], function (jquery, Q, app) {
-	window.$ = jQuery;
+requirejs(['jquery', 'Q', 'app', 'startup', 'style!primary'], function (jquery, Q, app, startup) {
+	window.$ = jquery;
 	window.Q = Q;
 	window.app = app;
 
-	app.init();
+	// TODO is this the right place?
+	Q.longStackSupport = true;
+	Q.onerror = function () {
+		console.log('Q.onerror', this, arguments);
+	};
+
+	startup();
 });
+
+// TODO is this the right place / right way?
+window.requireOneDeferred = function (dep) {
+	var defer = Q.defer();
+	require([dep], function (loadedDep) {
+		defer.resolve(loadedDep);
+	});
+
+	return defer.promise;
+};
+
+window.requireDeferred = function (deps) {
+	var defer = Q.defer();
+	require(deps, function () {
+		var loadedDeps = {};
+		for (var i = 0; i < arguments.length; i++) {
+			loadedDeps[deps[i]] = arguments[i];
+		}
+
+		defer.resolve(loadedDeps);
+	});
+
+	return defer.promise;
+};
