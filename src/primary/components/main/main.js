@@ -23,13 +23,18 @@ define(['components/main/mainmenubuilder'], function (MainMenuBuilder) {
 		return app.loadPanel('components/main/mainpanel', $('#Content'))
 			.then(function (panel) {
 				panel.run();
-				console.log('Main Panel');
 			});
 	};
 
 	function setupMenu(menu) {
 		menu.add('File', function () {
 			this.add('Application', function () {
+				this.add('Components', null, function () {
+					app.loadPanel('components/main/componentslist', $('#Content'))
+						.then(function (panel) {
+							panel.run();
+						});
+				});
 				this.add('Exit', null, function () {
 					chrome.app.window.current().close();
 				});

@@ -7,10 +7,10 @@ define(function () {
 	};
 
 	c.prototype.register = function () {
-		// this._load();
+
 	};
 
-	c.prototype._load = function () {
+	c.prototype.load = function () {
 
 	};
 
