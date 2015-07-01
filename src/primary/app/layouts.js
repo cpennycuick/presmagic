@@ -1,6 +1,6 @@
 define([
-	'app/layout/standard',
-	'app/layout/dialog'],
+	'app/layouts/standard',
+	'app/layouts/dialog'],
 	function (
 		layoutStandard,
 		layoutDialog

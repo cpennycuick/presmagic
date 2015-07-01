@@ -1,4 +1,4 @@
-define(['style!mainmenu'], function () {
+define(['style!components/main/mainmenu'], function () {
 
 	function MainMenuBuilder() {
 		this._items = [];

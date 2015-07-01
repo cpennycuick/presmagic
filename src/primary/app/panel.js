@@ -1,4 +1,4 @@
-define(['app/layout'], function (appLayout) {
+define(['app/layouts'], function (appLayouts) {
 
 	var c = function ($root, options) {
 		this._$root = $root;
@@ -33,7 +33,7 @@ define(['app/layout'], function (appLayout) {
 
 	c.prototype._setupLayout = function () {
 		var options = this._options;
-		var layoutClass = appLayout[options.Layout];
+		var layoutClass = appLayouts[options.Layout];
 		this._layout = new layoutClass(this._$root, options.LayoutOptions);
 
 		this._layout.wrap();

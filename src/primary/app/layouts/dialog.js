@@ -1,4 +1,4 @@
-define(['app/layout/standard'], function (layoutStandard) {
+define(['app/layouts/standard'], function (layoutStandard) {
 
 	var c = function ($root, options) {
 		if (!$root || !$root.length) {
@@ -7,12 +7,13 @@ define(['app/layout/standard'], function (layoutStandard) {
 
 		layoutStandard.prototype.constructor.call(this, $root, options);
 
+		this._$cloak = $();
 		this._$buttons = $();
 	};
 	c.prototype = new layoutStandard();
 
 	c.prototype.wrap = function () {
-		var $wrap = $(
+		this._$cloak = $(
 '<div class="Cloak">'+
 '	<div class="Dialog">'+
 '		<div class="DialogTitle"></div>'+
@@ -22,7 +23,7 @@ define(['app/layout/standard'], function (layoutStandard) {
 '</div>'
 		);
 
-		this._$root.append($wrap);
+		this._$root.append(this._$cloak);
 		this._$buttons = this._$root.find('.DialogButtons');
 		this._$container = this._$root.find('.DialogContent');
 
@@ -30,13 +31,21 @@ define(['app/layout/standard'], function (layoutStandard) {
 		$.each(this._options.buttons || [], $.proxy(this._addButton, this));
 	};
 
+	c.prototype.close = function () {
+		this._$cloak.remove();
+	};
+
 	c.prototype._addButton = function (i, button) {
-		var $button = $('<button></button>');
-		$button.text(button.text);
-		$button.addClass(button.className);
-		$button.click(function () {
-			button.action();
-		});
+		var $button = $('<button></button>')
+			.text(button.text)
+			.addClass('dialog '+button.className);
+
+		if (button.action === 'close') {
+			$button.click(this.close.bind(this));
+		} else if (button.action) {
+			$button.click(button.action);
+		}
+
 		this._$buttons.append($button);
 	};
 

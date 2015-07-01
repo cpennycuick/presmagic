@@ -1,9 +1,9 @@
 define(function () {
 
 	var c = function (name, version, contributers) {
-		this._name = name;
-		this._version = version;
-		this._contributers = contributers;
+		this.name = name;
+		this.version = version;
+		this.contributers = contributers;
 	};
 
 	c.prototype.register = function () {

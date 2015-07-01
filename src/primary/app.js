@@ -8,6 +8,7 @@ define(function () {
 	app.EVENT_PANEL_PREPARE = 'Panel:Prepare';
 	app.EVENT_PANEL_LOADED = 'Panel:Loaded';
 
+	app.components = [];
 	app.classes = {};
 	app.event = null;
 

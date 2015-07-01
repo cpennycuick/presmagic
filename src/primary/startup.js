@@ -1,6 +1,21 @@
 define(function () {
 
-	var components = [];
+	return function () {
+		return Q()
+			.then(loadClasses)
+			.then(app.init)
+			.then(onDOMLoaded)
+			.then(initComponents)
+			.then(registerComponents)
+			.then(startComponents)
+			.then(app.start)
+			.catch(function (e) {
+				console.log('startup() error', e);
+			})
+			.done(function () {
+				console.log('startup() done!', arguments);
+			});
+	};
 
 	function loadClasses() {
 		var classPathMapClassName = {
@@ -27,7 +42,7 @@ define(function () {
 			});
 	}
 
-	function registerComponents() {
+	function initComponents() {
 		return requireOneDeferred('text!components.json')
 			.then(function (componentsJSON) {
 				var componentNames = JSON.parse(componentsJSON);
@@ -41,25 +56,10 @@ define(function () {
 			})
 			.then(requireDeferred)
 			.then(function (componentClasses) {
-				var promises = [];
 				Object.keys(componentClasses).forEach(function (componentPath) {
 					var componentClass = componentClasses[componentPath];
-
-					var component = new componentClass();
-					components.push(component);
-
-					var promise = Q(component.register())
-						.then(function () {
-							console.log('['+component._name+'] component.register() done!', arguments);
-						})
-						.catch(function (e) {
-							console.log('['+component._name+'] component.register() error', e);
-						});
-
-					promises.push(promise);
+					app.components.push(new componentClass());
 				});
-
-				return Q.allSettled(promises);
 			})
 			.then(function () {
 				console.log('registerComponents() done!', arguments);
@@ -69,9 +69,26 @@ define(function () {
 			});
 	}
 
+	function registerComponents() {
+		var promises = [];
+		app.components.forEach(function (component) {
+			var promise = Q(component.register())
+				.then(function () {
+					console.log('['+component._name+'] component.register() done!', arguments);
+				})
+				.catch(function (e) {
+					console.log('['+component._name+'] component.register() error', e);
+				});
+
+			promises.push(promise);
+		});
+
+		return Q.allSettled(promises);
+	}
+
 	function startComponents () {
 		var promises = [];
-		components.forEach(function (component) {
+		app.components.forEach(function (component) {
 			var promise = Q(component.load())
 				.then(function () {
 					console.log('['+component._name+'] component.load() done!', arguments);
@@ -83,13 +100,7 @@ define(function () {
 			promises.push(promise);
 		});
 
-		return Q.allSettled(promises)
-			.then(function () {
-				console.log('startComponents() done!', arguments);
-			})
-			.catch(function (e) {
-				console.log('startComponents() error', e);
-			});
+		return Q.allSettled(promises);
 	}
 
 	function onDOMLoaded () {
@@ -101,21 +112,5 @@ define(function () {
 
 		return defer.promise;
 	}
-
-	return function () {
-		return Q()
-			.then(loadClasses)
-			.then(app.init)
-			.then(registerComponents)
-			.then(startComponents)
-			.then(onDOMLoaded)
-			.then(app.start)
-			.catch(function (e) {
-				console.log('startup() error', e);
-			})
-			.done(function () {
-				console.log('startup() done!', arguments);
-			});
-	};
 
 });
