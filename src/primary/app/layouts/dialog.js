@@ -13,22 +13,24 @@ define(['app/layouts/standard'], function (layoutStandard) {
 	c.prototype = new layoutStandard();
 
 	c.prototype.wrap = function () {
-		this._$cloak = $(
-'<div class="Cloak">'+
+		this._$cloak = $('<div class="Cloak"></div>');
+
+		var $dialog = $(
 '	<div class="Dialog">'+
 '		<div class="DialogTitle"></div>'+
 '		<div class="DialogContent"></div>'+
 '		<div class="DialogButtons"></div>'+
-'	</div>'+
-'</div>'
-		);
+'	</div>'
+);
 
-		this._$root.append(this._$cloak);
-		this._$buttons = this._$root.find('.DialogButtons');
-		this._$container = this._$root.find('.DialogContent');
+		this._$buttons = $dialog.find('.DialogButtons');
+		this._$container = $dialog.find('.DialogContent');
 
-		this._$root.find('.DialogTitle').text(this._options.title);
+		$dialog.find('.DialogTitle').text(this._options.title);
 		$.each(this._options.buttons || [], $.proxy(this._addButton, this));
+
+		this._$cloak.append($dialog);
+		this._$root.append(this._$cloak);
 	};
 
 	c.prototype.close = function () {
