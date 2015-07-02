@@ -29,14 +29,19 @@ define(['components/main/mainmenubuilder'], function (MainMenuBuilder) {
 	function setupMenu(menu) {
 		menu.add('File', function () {
 			this.add('Application', function () {
+				this.add('Exit', null, function () {
+					chrome.app.window.current().close();
+				});
+			});
+		});
+
+		menu.add('Help', function () {
+			this.add('Help', function () {
 				this.add('Components', null, function () {
 					app.loadPanel('components/main/componentslist', $('#Content'))
 						.then(function (panel) {
 							panel.run();
 						});
-				});
-				this.add('Exit', null, function () {
-					chrome.app.window.current().close();
 				});
 			});
 		});

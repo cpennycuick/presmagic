@@ -21,6 +21,7 @@ define(function () {
 		var classPathMapClassName = {
 			'app/eventmanager': 'EventManager',
 			'app/component': 'Component',
+			'app/template': 'Template',
 			'app/panel': 'Panel'
 		};
 

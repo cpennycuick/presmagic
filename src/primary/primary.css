@@ -27,26 +27,44 @@ table, td, div, span, p { padding: 0px; margin: 0px; }
 	left: 0px;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 0, 0, 0.1);
+	background: rgba(0, 0, 0, 0.2) url("/resources/cloak_bars.png") repeat;
 	text-align: center;
+	z-index: 10000;
 }
 
 .Dialog {
+	background-color: #222;
 	border: 4px solid #222;
 	border-radius: 8px;
 	min-width: 400px;
 	margin: 64px auto;
 	display: inline-block;
 	text-align: left;
-	box-shadow: 0px 0px 128px -32px rgba(0, 0, 0, 0.5);
+	box-shadow: 0px 0px 128px 0px rgba(0, 0, 0, 0.5);
 }
 
 .Dialog .DialogTitle {
 	background-color: #EEE;
 	padding: 6px 12px;
-	border-radius: 8px 8px 0px 0px;
+	border-radius: 4px 4px 0px 0px;
 	border-bottom: 1px solid #DDD;
 	font-size: 24px;
+}
+
+.Dialog .DialogCloseButton {
+	float: right;
+	width: 24px;
+	height: 24px;
+	display: inline-block;
+	background-color: #222;
+	background: #222 url("/resources/icons/dialog_close.png") no-repeat center center;
+	border: 4px solid #222;
+	border-width: 0px 0px 4px 4px;
+	border-radius: 0px 0px 0px 8px;
+	cursor: pointer;
+}
+.Dialog .DialogCloseButton:hover {
+	background-color: #444;
 }
 
 .Dialog .DialogContent {
@@ -56,11 +74,11 @@ table, td, div, span, p { padding: 0px; margin: 0px; }
 }
 
 .Dialog .DialogButtons {
-	border-radius: 0px 0px 8px 8px;
-	background-color: #EEE;
-	border-top: 1px solid #DDD;
+	background-color: #222;
+	border-top: 1px solid #AAA;
 	padding: 6px;
 	text-align: right;
+	min-height: 6px;
 }
 
 button.dialog {

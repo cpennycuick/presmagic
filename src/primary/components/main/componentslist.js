@@ -1,21 +1,15 @@
-define(['text!components/main/componentslist.html'], function (template) {
+define(['text!components/main/componentslist.html'], function (templateHTML) {
 
 	var parentClass = app.classes.Panel;
 	var parent = parentClass.prototype;
 
-	var $template = $(template);
+	var template = new app.classes.Template(templateHTML);
 
 	var c = function ($container) {
 		parent.constructor.call(this, $container, {
 			Layout: 'Dialog',
 			LayoutOptions: {
 				title: 'Components List',
-				buttons: [
-					{
-						text: 'Close',
-						action: 'close'
-					}
-				]
 			}
 		});
 	};
@@ -25,8 +19,8 @@ define(['text!components/main/componentslist.html'], function (template) {
 	c.prototype._prepare = function () {
 		parent._prepare.call(this);
 
-		$template.filter('[data-template=ComponentsListPanel]')
-			.clone().appendTo(this.getContainer());
+		template.get('ComponentsListPanel')
+			.appendTo(this.getContainer());
 
 		this._populateList();
 	};
@@ -34,9 +28,7 @@ define(['text!components/main/componentslist.html'], function (template) {
 	c.prototype._populateList = function () {
 		var $tbody = this.$('table tbody');
 
-		var $oRow = $template
-			.filter('[data-template=ComponentsListRow]')
-			.find('tr').clone();
+		var $oRow = template.get('ComponentsListRow', 'tr');
 
 		app.components.forEach(function (component) {
 			var $row = $oRow.clone();
