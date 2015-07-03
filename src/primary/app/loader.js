@@ -5,6 +5,7 @@ define(function () {
 		this._total = 0;
 
 		this._updateFns = [];
+		this._destroyed = false;
 	};
 
 	c.prototype.isComplete = function () {
@@ -36,6 +37,10 @@ define(function () {
 	}
 
 	c.prototype._simulateProgress = function () {
+		if (this._destroyed) {
+			return;
+		}
+
 		if (Math.floor(this._progress / this._total * 100) > 95) {
 			return;
 		}
@@ -46,18 +51,35 @@ define(function () {
 	};
 
 	c.prototype.onUpdate = function (fn) {
+		if (this._destroyed) {
+			return;
+		}
+
 		this._updateFns.push(fn);
 	};
 
 	c.prototype._incrementProgress = function () {
+		if (this._destroyed) {
+			return;
+		}
+
 		this._progress += 1;
 		this._update();
 	};
 
 	c.prototype._update = function () {
+		if (this._destroyed) {
+			return;
+		}
+
 		this._updateFns.forEach(function (fn) {
 			fn(this._progress, this._total);
 		}, this);
+	};
+
+	c.prototype.destroy = function () {
+		this._updateFns = null;
+		this._destroyed = true;
 	};
 
 	return c;

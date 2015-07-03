@@ -1,15 +1,15 @@
 define(function () {
 
-	var c = function () {
-
+	var c = function (name) {
+		this._name = name;
 	};
 
-	c.buildInfo = function (name, version, contributers, description) {
+	c.prototype.buildInfo = function (version, contributers, description) {
 		var versionParts = (version || '0.0.1').split('.');
 		versionParts = versionParts.concat(['0', '0', '0'].slice(versionParts.length, 3));
 
 		return {
-			Name: name,
+			Name: this._name,
 			Version: versionParts.join('.'),
 			Contributers: contributers || [],
 			Description: description || null

@@ -4,13 +4,13 @@ define(function () {
 	var parent = parentClass.prototype;
 
 	var c = function () {
-		parent.constructor.call(this);
+		parent.constructor.call(this, 'Core');
 	};
 
 	c.prototype = new parentClass();
 
 	c.prototype.getInfo = function () {
-		return parentClass.buildInfo('Core', '0.1', ['Chris; @cpennycuick'],
+		return this.buildInfo('0.1', ['Chris; @cpennycuick'],
 			'This is the core component which adds all the base features to the application.'
 		);
 	};

@@ -11,11 +11,8 @@ define(function () {
 			.then(app.start)
 			.then(onLoadComplete)
 			.then(removeSplashLoader)
-			.catch(function (e) {
-				console.log('startup() error', e);
-			})
 			.done(function () {
-				console.log('startup() done!');
+				console.log('Startup done()');
 			});
 	};
 
@@ -43,12 +40,6 @@ define(function () {
 					var componentClass = componentClasses[componentPath];
 					app.components.push(new componentClass());
 				});
-			})
-			.then(function () {
-				console.log('registerComponents() done!');
-			})
-			.catch(function (e) {
-				console.log('registerComponents() error', e);
 			});
 	}
 
@@ -57,11 +48,8 @@ define(function () {
 		app.components.forEach(function (component) {
 			var promise = Q(component.register())
 				.then(componentRegisterCompleteFn)
-				.then(function () {
-					console.log('component.register() done!');
-				})
-				.catch(function (e) {
-					console.log('component.register() error', e);
+				.then(function() {
+					console.log('Component', component._name, 'register()');
 				});
 
 			promises.push(promise);
@@ -75,11 +63,8 @@ define(function () {
 		app.components.forEach(function (component) {
 			var promise = Q(component.load())
 				.then(componentLoadCompleteFn)
-				.then(function () {
-					console.log('component.load() done!');
-				})
-				.catch(function (e) {
-					console.log('component.load() error', e);
+				.then(function() {
+					console.log('Component', component._name, 'load()');
 				});
 
 			promises.push(promise);
@@ -102,6 +87,7 @@ define(function () {
 		var appLoadComplete = app.loader.add();
 		app.event.bind(app.EVENT_APPLICATION_START, function () {
 			appLoadComplete();
+			appLoadComplete = null;
 		});
 
 		var $progressProgress = $('#SplashScreen .LoadingProgress');
@@ -115,6 +101,15 @@ define(function () {
 	function onLoadComplete() {
 		var defer = Q.defer();
 
+		defer.promise
+			.timeout(5000)
+			.fail(function (err) {
+				console.log('Failed to finish loading.');
+				clearInterval(interval);
+				defer.resolve();
+			})
+			.done();
+
 		var interval = setInterval(function () {
 			if (app.loader.isComplete()) {
 				clearInterval(interval);
@@ -122,12 +117,16 @@ define(function () {
 			}
 		}, 500);
 
-//		Q.timeout(defer.promise, 10);
-
 		return defer.promise;
 	}
 
 	function removeSplashLoader() {
+		componentRegisterCompleteFn = null;
+		componentLoadCompleteFn = null;
+
+		app.loader.destroy();
+		app.loader = null;
+
 		$('#SplashScreen').fadeOut(1000, function () {
 			$(this).remove();
 		});

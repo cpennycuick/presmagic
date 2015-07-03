@@ -11,7 +11,7 @@ define(function () {
 			}
 
 			this._events[name].push(fn);
-			console.log('event.bind', name);
+			console.log('Event bind', name);
 		}, this);
 	};
 
@@ -21,7 +21,7 @@ define(function () {
 				for (var i in this._events[name]) {
 					var fnArgs = (args ? $.extend({}, args) : {});
 					this._events[name][i](fnArgs);
-					console.log('event.trigger', name);
+					console.log('Event trigger', name);
 				}
 			}
 		}, this);
