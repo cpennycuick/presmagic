@@ -2,46 +2,25 @@ define(function () {
 
 	return function () {
 		return Q()
-			.then(loadClasses)
 			.then(app.init)
-			.then(onDOMLoaded)
 			.then(initComponents)
+			.then(onDOMLoaded)
+			.then(initSplashLoader)
 			.then(registerComponents)
 			.then(startComponents)
 			.then(app.start)
+			.then(onLoadComplete)
+			.then(removeSplashLoader)
 			.catch(function (e) {
 				console.log('startup() error', e);
 			})
 			.done(function () {
-				console.log('startup() done!', arguments);
+				console.log('startup() done!');
 			});
 	};
 
-	function loadClasses() {
-		var classPathMapClassName = {
-			'app/eventmanager': 'EventManager',
-			'app/component': 'Component',
-			'app/template': 'Template',
-			'app/panel': 'Panel'
-		};
-
-		var classPaths = Object.keys(classPathMapClassName);
-		return requireDeferred(classPaths)
-			.then(function (classPathsMapClass) {
-				Object.keys(classPathsMapClass).forEach(function (classPath) {
-					var className = classPathMapClassName[classPath];
-					app.classes[className] = classPathsMapClass[classPath];
-				});
-
-				return app.classes;
-			})
-			.then(function () {
-				console.log('loadClasses() done!', arguments);
-			})
-			.catch(function (e) {
-				console.log('loadClasses() error', e);
-			});
-	}
+	var componentRegisterCompleteFn = null;
+	var componentLoadCompleteFn = null;
 
 	function initComponents() {
 		return requireOneDeferred('text!components.json')
@@ -53,6 +32,9 @@ define(function () {
 					componentPaths.push('components/'+componentName+'/'+componentName);
 				});
 
+				componentRegisterCompleteFn = app.loader.add(componentPaths.length);
+				componentLoadCompleteFn = app.loader.add(componentPaths.length);
+
 				return componentPaths;
 			})
 			.then(requireDeferred)
@@ -63,7 +45,7 @@ define(function () {
 				});
 			})
 			.then(function () {
-				console.log('registerComponents() done!', arguments);
+				console.log('registerComponents() done!');
 			})
 			.catch(function (e) {
 				console.log('registerComponents() error', e);
@@ -74,11 +56,12 @@ define(function () {
 		var promises = [];
 		app.components.forEach(function (component) {
 			var promise = Q(component.register())
+				.then(componentRegisterCompleteFn)
 				.then(function () {
-					console.log('['+component._name+'] component.register() done!', arguments);
+					console.log('component.register() done!');
 				})
 				.catch(function (e) {
-					console.log('['+component._name+'] component.register() error', e);
+					console.log('component.register() error', e);
 				});
 
 			promises.push(promise);
@@ -91,11 +74,12 @@ define(function () {
 		var promises = [];
 		app.components.forEach(function (component) {
 			var promise = Q(component.load())
+				.then(componentLoadCompleteFn)
 				.then(function () {
-					console.log('['+component._name+'] component.load() done!', arguments);
+					console.log('component.load() done!');
 				})
 				.catch(function (e) {
-					console.log('['+component._name+'] component.load() error', e);
+					console.log('component.load() error', e);
 				});
 
 			promises.push(promise);
@@ -112,6 +96,41 @@ define(function () {
 		});
 
 		return defer.promise;
+	}
+
+	function initSplashLoader() {
+		var appLoadComplete = app.loader.add();
+		app.event.bind(app.EVENT_APPLICATION_START, function () {
+			appLoadComplete();
+		});
+
+		var $progressProgress = $('#SplashScreen .LoadingProgress');
+		app.loader.onUpdate(function (progress, total) {
+			$progressProgress.width((total ? Math.floor(progress / total * 100) : 100)+'%');
+		});
+
+		app.loader.startSimulateProgress();
+	}
+
+	function onLoadComplete() {
+		var defer = Q.defer();
+
+		var interval = setInterval(function () {
+			if (app.loader.isComplete()) {
+				clearInterval(interval);
+				defer.resolve();
+			}
+		}, 500);
+
+//		Q.timeout(defer.promise, 10);
+
+		return defer.promise;
+	}
+
+	function removeSplashLoader() {
+		$('#SplashScreen').fadeOut(1000, function () {
+			$(this).remove();
+		});
 	}
 
 });

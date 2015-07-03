@@ -1,4 +1,4 @@
-define(['text!components/main/componentslist.html'], function (templateHTML) {
+define(['text!components/core/componentslist.html'], function (templateHTML) {
 
 	var parentClass = app.classes.Panel;
 	var parent = parentClass.prototype;

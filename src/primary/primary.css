@@ -8,6 +8,46 @@ html, body {
 
 table, td, div, span, p { padding: 0px; margin: 0px; }
 
+#SplashScreen {
+	z-index: 9999999;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background: rgba(200, 200, 200, 1) url("/resources/cloak_bars.png") repeat;
+}
+
+#SplashScreen #SplashDialog {
+	width: 400px;
+	height: 200px;
+	background-color: #FFF;
+	border: 4px solid #222;
+	border-radius: 8px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -200px;
+	margin-top: -100px;
+	box-shadow: 0px 0px 128px 0px rgba(0, 0, 0, 0.5);
+}
+
+#SplashScreen #SplashDialog .LoadingBar {
+	width: 100%;
+	height: 12px;
+	position: absolute;
+	bottom: 8px;
+	left: 0px;
+	background-color: #AAA;
+}
+
+#SplashScreen #SplashDialog .LoadingBar .LoadingProgress {
+	width: 0%;
+	max-width: 100%;
+	height: 100%;
+	background: #888 url("/resources/cloak_bars.png") center left;
+}
+
 #Content {
 	width: 100%;
 	max-width: 100%;

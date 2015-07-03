@@ -1,11 +1,13 @@
-define(['style!components/main/mainmenu'], function () {
+define(['style!mainmenu'], function () {
+
+	var itemIndex = 0;
 
 	function MainMenuBuilder() {
 		this._items = [];
 	}
 
-	MainMenuBuilder.prototype.add = function (name, setupFn) {
-		var item = new MenuItem(name);
+	MainMenuBuilder.prototype.add = function (name, priority, setupFn) {
+		var item = new MenuItem(name, Math.min(99, Math.max(0, priority)));
 
 		if ($.isFunction(setupFn)) {
 			setupFn.call(item);
@@ -16,6 +18,11 @@ define(['style!components/main/mainmenu'], function () {
 
 	MainMenuBuilder.prototype.render = function () {
 		var $menu = $('<ul id="MainMenuList"></ul>');
+
+		this._items.sort(function (itemA, itemB) {
+			return (itemA.priority() - itemB.priority())
+			 || (itemA.index() - itemB.index());
+		});
 
 		this._items.forEach(function (item) {
 			$menu.append(item.render());
@@ -64,10 +71,20 @@ define(['style!components/main/mainmenu'], function () {
 		});
 	}
 
-	function MenuItem(name) {
+	function MenuItem(name, priority) {
 		this._name = name;
+		this._priority = priority;
+		this._index = itemIndex++;
 		this._groups = [];
 	}
+
+	MenuItem.prototype.priority = function () {
+		return this._priority;
+	};
+
+	MenuItem.prototype.index = function () {
+		return this._index;
+	};
 
 	MenuItem.prototype.add = function (name, setupFn) {
 		var group = new MenuGroup(name);
@@ -83,6 +100,10 @@ define(['style!components/main/mainmenu'], function () {
 		var $item = $('<li><div class="Item"><div class="Text"></div></div><div class="SubMenu"></div></li>');
 		$item.find('.Item .Text').text(this._name);
 
+		this._groups.sort(function (groupA, groupB) {
+			return groupA.getName().localeCompare(groupB.getName());
+		});
+
 		var $submenu = $item.find('.SubMenu');
 		this._groups.forEach(function (group) {
 			$submenu.append(group.render());
@@ -95,6 +116,10 @@ define(['style!components/main/mainmenu'], function () {
 		this._name = name;
 		this._items = [];
 	}
+
+	MenuGroup.prototype.getName = function () {
+		return this._name;
+	};
 
 	MenuGroup.prototype.add = function (name, icon, action) {
 		this._items.push({
