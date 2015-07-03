@@ -10,7 +10,7 @@ define(function () {
 	c.prototype = new parentClass();
 
 	c.prototype.getInfo = function () {
-		return c.buildInfo('Test', '0.0.1', ['Chris; @cpennycuick'],
+		return parentClass.buildInfo('Test', '0.0.1', ['Chris; @cpennycuick'],
 			'This is a test component running along side the core component.'
 		);
 	};

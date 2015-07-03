@@ -3,16 +3,19 @@ define(function () {
 	var c = function () {
 
 	};
-	
+
 	c.buildInfo = function (name, version, contributers, description) {
-		retun {
+		var versionParts = (version || '0.0.1').split('.');
+		versionParts = versionParts.concat(['0', '0', '0'].slice(versionParts.length, 3));
+
+		return {
 			Name: name,
-			Version: version || '0.0.1',
+			Version: versionParts.join('.'),
 			Contributers: contributers || [],
 			Description: description || null
 		};
 	};
-	
+
 	c.prototype.getInfo = function () {
 		return c.buildInfo('Unnamed');
 	};

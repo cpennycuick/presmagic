@@ -2,7 +2,7 @@ define(['components/main/mainmenubuilder'], function (MainMenuBuilder) {
 
 	var parentClass = app.classes.Component;
 	var parent = parentClass.prototype;
-	
+
 	var c = function () {
 		parent.constructor.call(this);
 
@@ -10,9 +10,9 @@ define(['components/main/mainmenubuilder'], function (MainMenuBuilder) {
 	};
 
 	c.prototype = new parentClass();
-	
+
 	c.prototype.getInfo = function () {
-		return c.buildInfo('Main', '0.1', ['Chris; @cpennycuick'],
+		return parentClass.buildInfo('Main', '0.1', ['Chris; @cpennycuick'],
 			'This is the core component which adds all the base features to the application.'
 		);
 	};
