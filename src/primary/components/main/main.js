@@ -2,16 +2,20 @@ define(['components/main/mainmenubuilder'], function (MainMenuBuilder) {
 
 	var parentClass = app.classes.Component;
 	var parent = parentClass.prototype;
-
+	
 	var c = function () {
-		parent.constructor.call(this, 'Main', '0.1', [
-			'Chris; @cpennycuick'
-		]);
+		parent.constructor.call(this);
 
 		this._mainMenuBuilder = new MainMenuBuilder();
 	};
 
 	c.prototype = new parentClass();
+	
+	c.prototype.getInfo = function () {
+		return c.buildInfo('Main', '0.1', ['Chris; @cpennycuick'],
+			'This is the core component which adds all the base features to the application.'
+		);
+	};
 
 	c.prototype.register = function () {
 		setupMenu(this._mainMenuBuilder);

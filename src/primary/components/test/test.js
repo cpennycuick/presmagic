@@ -4,12 +4,16 @@ define(function () {
 	var parent = parentClass.prototype;
 
 	var c = function () {
-		parent.constructor.call(this, 'Test', '0.1', [
-			'Chris; @cpennycuick'
-		]);
+		parent.constructor.call(this);
 	};
 
 	c.prototype = new parentClass();
+
+	c.prototype.getInfo = function () {
+		return c.buildInfo('Test', '0.0.1', ['Chris; @cpennycuick'],
+			'This is a test component running along side the core component.'
+		);
+	};
 
 	c.prototype.register = function () {
 

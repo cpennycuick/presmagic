@@ -32,8 +32,12 @@ define(['text!components/main/componentslist.html'], function (templateHTML) {
 
 		app.components.forEach(function (component) {
 			var $row = $oRow.clone();
-			$row.find('[data-value=Name]').text(component.name);
-			$row.find('[data-value=Version]').text(component.version);
+
+			var info = component.getInfo();
+			$row.attr('title', info.Description);
+			$row.find('[data-value=Name]').text(info.Name);
+			$row.find('[data-value=Version]').text(info.Version);
+
 			$tbody.append($row);
 		});
 	};

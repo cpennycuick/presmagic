@@ -1,9 +1,20 @@
 define(function () {
 
-	var c = function (name, version, contributers) {
-		this.name = name;
-		this.version = version;
-		this.contributers = contributers;
+	var c = function () {
+
+	};
+	
+	c.buildInfo = function (name, version, contributers, description) {
+		retun {
+			Name: name,
+			Version: version || '0.0.1',
+			Contributers: contributers || [],
+			Description: description || null
+		};
+	};
+	
+	c.prototype.getInfo = function () {
+		return c.buildInfo('Unnamed');
 	};
 
 	c.prototype.register = function () {
