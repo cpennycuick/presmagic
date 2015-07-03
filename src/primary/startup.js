@@ -1,33 +1,25 @@
 define(function () {
 
-	var components = [];
-
-	function loadClasses() {
-		var classPathMapClassName = {
-			'app/eventmanager': 'EventManager',
-			'app/component': 'Component',
-			'app/panel': 'Panel'
-		};
-
-		var classPaths = Object.keys(classPathMapClassName);
-		return requireDeferred(classPaths)
-			.then(function (classPathsMapClass) {
-				Object.keys(classPathsMapClass).forEach(function (classPath) {
-					var className = classPathMapClassName[classPath];
-					app.classes[className] = classPathsMapClass[classPath];
-				});
-
-				return app.classes;
-			})
-			.then(function () {
-				console.log('loadClasses() done!', arguments);
-			})
-			.catch(function (e) {
-				console.log('loadClasses() error', e);
+	return function () {
+		return Q()
+			.then(app.init)
+			.then(initComponents)
+			.then(onDOMLoaded)
+			.then(initSplashLoader)
+			.then(registerComponents)
+			.then(startComponents)
+			.then(app.start)
+			.then(onLoadComplete)
+			.then(removeSplashLoader)
+			.done(function () {
+				console.log('Startup done()');
 			});
-	}
+	};
 
-	function registerComponents() {
+	var componentRegisterCompleteFn = null;
+	var componentLoadCompleteFn = null;
+
+	function initComponents() {
 		return requireOneDeferred('text!components.json')
 			.then(function (componentsJSON) {
 				var componentNames = JSON.parse(componentsJSON);
@@ -37,59 +29,48 @@ define(function () {
 					componentPaths.push('components/'+componentName+'/'+componentName);
 				});
 
+				componentRegisterCompleteFn = app.loader.add(componentPaths.length);
+				componentLoadCompleteFn = app.loader.add(componentPaths.length);
+
 				return componentPaths;
 			})
 			.then(requireDeferred)
 			.then(function (componentClasses) {
-				var promises = [];
 				Object.keys(componentClasses).forEach(function (componentPath) {
 					var componentClass = componentClasses[componentPath];
-
-					var component = new componentClass();
-					components.push(component);
-
-					var promise = Q(component.register())
-						.then(function () {
-							console.log('['+component._name+'] component.register() done!', arguments);
-						})
-						.catch(function (e) {
-							console.log('['+component._name+'] component.register() error', e);
-						});
-
-					promises.push(promise);
+					app.components.push(new componentClass());
 				});
-
-				return Q.allSettled(promises);
-			})
-			.then(function () {
-				console.log('registerComponents() done!', arguments);
-			})
-			.catch(function (e) {
-				console.log('registerComponents() error', e);
 			});
 	}
 
-	function startComponents () {
+	function registerComponents() {
 		var promises = [];
-		components.forEach(function (component) {
-			var promise = Q(component.load())
-				.then(function () {
-					console.log('['+component._name+'] component.load() done!', arguments);
-				})
-				.catch(function (e) {
-					console.log('['+component._name+'] component.load() error', e);
+		app.components.forEach(function (component) {
+			var promise = Q(component.register())
+				.then(componentRegisterCompleteFn)
+				.then(function() {
+					console.log('Component', component._name, 'register()');
 				});
 
 			promises.push(promise);
 		});
 
-		return Q.allSettled(promises)
-			.then(function () {
-				console.log('startComponents() done!', arguments);
-			})
-			.catch(function (e) {
-				console.log('startComponents() error', e);
-			});
+		return Q.allSettled(promises);
+	}
+
+	function startComponents () {
+		var promises = [];
+		app.components.forEach(function (component) {
+			var promise = Q(component.load())
+				.then(componentLoadCompleteFn)
+				.then(function() {
+					console.log('Component', component._name, 'load()');
+				});
+
+			promises.push(promise);
+		});
+
+		return Q.allSettled(promises);
 	}
 
 	function onDOMLoaded () {
@@ -102,20 +83,53 @@ define(function () {
 		return defer.promise;
 	}
 
-	return function () {
-		return Q()
-			.then(loadClasses)
-			.then(app.init)
-			.then(registerComponents)
-			.then(startComponents)
-			.then(onDOMLoaded)
-			.then(app.start)
-			.catch(function (e) {
-				console.log('startup() error', e);
+	function initSplashLoader() {
+		var appLoadComplete = app.loader.add();
+		app.event.bind(app.EVENT_APPLICATION_START, function () {
+			appLoadComplete();
+			appLoadComplete = null;
+		});
+
+		var $progressProgress = $('#SplashScreen .LoadingProgress');
+		app.loader.onUpdate(function (progress, total) {
+			$progressProgress.width((total ? Math.floor(progress / total * 100) : 100)+'%');
+		});
+
+		app.loader.startSimulateProgress();
+	}
+
+	function onLoadComplete() {
+		var defer = Q.defer();
+
+		defer.promise
+			.timeout(5000)
+			.fail(function (err) {
+				console.log('Failed to finish loading.');
+				clearInterval(interval);
+				defer.resolve();
 			})
-			.done(function () {
-				console.log('startup() done!', arguments);
-			});
-	};
+			.done();
+
+		var interval = setInterval(function () {
+			if (app.loader.isComplete()) {
+				clearInterval(interval);
+				defer.resolve();
+			}
+		}, 500);
+
+		return defer.promise;
+	}
+
+	function removeSplashLoader() {
+		componentRegisterCompleteFn = null;
+		componentLoadCompleteFn = null;
+
+		app.loader.destroy();
+		app.loader = null;
+
+		$('#SplashScreen').fadeOut(1000, function () {
+			$(this).remove();
+		});
+	}
 
 });

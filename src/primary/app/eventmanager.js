@@ -1,6 +1,33 @@
 define(function () {
 
-	function makeArray(value) {
+	var c = function () {
+		this._events = {};
+	};
+
+	c.prototype.bind = function (names, fn) {
+		this._makeArray(names).forEach(function (name) {
+			if (!(name in this._events)) {
+				this._events[name] = [];
+			}
+
+			this._events[name].push(fn);
+			console.log('Event bind', name);
+		}, this);
+	};
+
+	c.prototype.trigger = function (names, args) {
+		this._makeArray(names).forEach(function (name) {
+			if (name in this._events) {
+				for (var i in this._events[name]) {
+					var fnArgs = (args ? $.extend({}, args) : {});
+					this._events[name][i](fnArgs);
+					console.log('Event trigger', name);
+				}
+			}
+		}, this);
+	};
+
+	c.prototype._makeArray = function (value) {
 		if (value === null || value === undefined) {
 			return [];
 		} else if (value instanceof Array) {
@@ -8,33 +35,8 @@ define(function () {
 		}
 
 		return [value];
-	}
-
-	return function () {
-		var events = {};
-
-		this.bind = function (names, fn) {
-			makeArray(names).forEach(function (name) {
-				if (!(name in events)) {
-					events[name] = [];
-				}
-
-				events[name].push(fn);
-				console.log('event.bind', name);
-			});
-		};
-
-		this.trigger = function (names, args) {
-			makeArray(names).forEach(function (name) {
-				if (name in events) {
-					for (var i in events[name]) {
-						var fnArgs = (args ? $.extend({}, args) : {});
-						events[name][i](fnArgs);
-						console.log('event.trigger', name);
-					}
-				}
-			});
-		};
 	};
+
+	return c;
 
 });

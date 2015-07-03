@@ -8,6 +8,46 @@ html, body {
 
 table, td, div, span, p { padding: 0px; margin: 0px; }
 
+#SplashScreen {
+	z-index: 9999999;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background: rgba(200, 200, 200, 1) url("/resources/cloak_bars.png") repeat;
+}
+
+#SplashScreen #SplashDialog {
+	width: 400px;
+	height: 200px;
+	background-color: #FFF;
+	border: 4px solid #222;
+	border-radius: 8px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -200px;
+	margin-top: -100px;
+	box-shadow: 0px 0px 128px 0px rgba(0, 0, 0, 0.5);
+}
+
+#SplashScreen #SplashDialog .LoadingBar {
+	width: 100%;
+	height: 12px;
+	position: absolute;
+	bottom: 8px;
+	left: 0px;
+	background-color: #AAA;
+}
+
+#SplashScreen #SplashDialog .LoadingBar .LoadingProgress {
+	width: 0%;
+	max-width: 100%;
+	height: 100%;
+	background: #888 url("/resources/cloak_bars.png") center left;
+}
+
 #Content {
 	width: 100%;
 	max-width: 100%;
@@ -21,20 +61,99 @@ table, td, div, span, p { padding: 0px; margin: 0px; }
 	margin: 0px;
 }
 
-table.Layout td.VerticalLayoutDivider {
-	width: 3px;
-	max-width: 3px;
-	border: 1px solid #AAA;
-	border-width: 0px 1px;
-	background-color: #CCC;
-	cursor: ew-resize;
+.Cloak {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.2) url("/resources/cloak_bars.png") repeat;
+	text-align: center;
+	z-index: 10000;
 }
 
-table.Layout td.HorizontalLayoutDivider {
-	height: 3px;
-	max-height: 3px;
-	border: 1px solid #AAA;
-	border-width: 1px 0px;
-	background-color: #CCC;
-	cursor: ns-resize;
+.Dialog {
+	background-color: #222;
+	border: 4px solid #222;
+	border-radius: 8px;
+	min-width: 400px;
+	margin: 64px auto;
+	display: inline-block;
+	text-align: left;
+	box-shadow: 0px 0px 128px 0px rgba(0, 0, 0, 0.5);
 }
+
+.Dialog .DialogTitle {
+	background-color: #EEE;
+	padding: 6px 12px;
+	border-radius: 4px 4px 0px 0px;
+	border-bottom: 1px solid #DDD;
+	font-size: 24px;
+}
+
+.Dialog .DialogCloseButton {
+	float: right;
+	width: 24px;
+	height: 24px;
+	display: inline-block;
+	background-color: #222;
+	background: #222 url("/resources/icons/dialog_close.png") no-repeat center center;
+	border: 4px solid #222;
+	border-width: 0px 0px 4px 4px;
+	border-radius: 0px 0px 0px 8px;
+	cursor: pointer;
+}
+.Dialog .DialogCloseButton:hover {
+	background-color: #444;
+}
+
+.Dialog .DialogContent {
+	background-color: #FFF;
+	padding: 6px;
+	min-height: 128px;
+}
+
+.Dialog .DialogButtons {
+	background-color: #222;
+	border-top: 1px solid #AAA;
+	padding: 6px;
+	text-align: right;
+	min-height: 6px;
+}
+
+button.dialog {
+	border-radius: 4px;
+	border: 1px solid #AAA;
+	background-color: #DFDFDF;
+	padding: 4px 8px;
+	cursor: pointer;
+	outline: none;
+	font-size: 12px;
+}
+button.dialog:hover {
+	background-color: #DADADA;
+	border: 1px solid #666;
+}
+
+table.StandardList {
+	width: 100%;
+	border-spacing: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+table.StandardList > thead > tr > * {
+	border-bottom: 1px solid #888;
+}
+table.StandardList > tbody > tr + tr > td {
+	border-top: 1px solid #CCC;
+}
+table.StandardList > tbody > tr > td + td {
+	border-left: 1px solid #CCC;
+}
+table.StandardList > thead > tr > *,
+table.StandardList > tbody > tr > td,
+table.StandardList > tfoot > tr > td,
+table.StandardList > tr > td {
+	padding: 2px 4px;
+}
+
