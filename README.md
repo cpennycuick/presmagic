@@ -16,34 +16,38 @@ https://developer.chrome.com/apps/api_index
 ## GIT Help
 These are things I have searched multiple times, so this is a list for easy reference.
 
-**Create Branch with remote tracking**
-git branch [branchname]
-git push origin [branchname]
-git branch -u origin/[branchname] [branchname]
+**Create Branch with remote tracking**  
+git branch [branchname]  
+git push origin [branchname]  
+git branch -u origin/[branchname] [branchname]  
 
-**Show all branches local and remote**
-git branch -avv
+**Checkout remote branch**  
+git checkout -b [branchname]  
+git branch -u origin/[branchname] [branchname]  
 
-**Mark all changes for commit**
-git add -A
+**Show all branches local and remote**  
+git branch -avv  
 
-**Commit changes to local**
-git commit -m "[message]"
+**Mark all changes for commit**  
+git add -A  
 
-**Push changes to remote tracking branch**
-git push [branchname]
+**Commit changes to local**  
+git commit -m "[message]"  
 
-**Update tracking branches to show remote changes**
-git fetch
+**Push changes to remote tracking branch**  
+git push [branchname]  
 
-**Update local branch to remote**
-git pull [branchname]
+**Update tracking branches to show remote changes**  
+git fetch  
 
-**Delete local branch**
-git branch -d [branchname]
+**Update local branch to remote**  
+git pull [branchname]  
 
-**Delete remote branch**
-git push origin --delete [branchname]
+**Delete local branch**  
+git branch -d [branchname]  
 
-**Show summary of changes**
-git status
+**Delete remote branch**  
+git push origin --delete [branchname]  
+
+**Show summary of changes**  
+git status  
