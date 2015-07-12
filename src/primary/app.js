@@ -8,6 +8,7 @@ define(function () {
 	app.EVENT_PANEL_SETUP = 'Panel:Setup';
 	app.EVENT_PANEL_PREPARE = 'Panel:Prepare';
 	app.EVENT_PANEL_LOADED = 'Panel:Loaded';
+	app.EVENT_PANEL_RESIZE = 'Panel:Resize';
 
 	app.components = [];
 	app.classes = {};
@@ -27,6 +28,7 @@ define(function () {
 			'app/component': 'Component',
 			'app/template': 'Template',
 			'app/panel': 'Panel',
+			'app/splitview': 'SplitView',
 			'app/loader': 'Loader'
 		};
 

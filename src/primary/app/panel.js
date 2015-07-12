@@ -3,6 +3,7 @@ define(['app/layouts'], function (appLayouts) {
 	var c = function ($root, options) {
 		this._$root = $root;
 		this._options = options || {};
+		this._event = new app.classes.EventManager();
 	};
 
 	c.prototype.run = function () {
@@ -46,7 +47,15 @@ define(['app/layouts'], function (appLayouts) {
 	c.prototype.$ = function (selector) {
 		return this.getContainer().find(selector);
 	};
-
+	
+	c.prototype.bind = function () {
+		this._event.bind.apply(this._event, arguments);
+	};
+	
+	c.prototype.trigger = function () {
+		this._event.trigger.apply(this._event, arguments);
+	};
+	
 	return c;
 
 });

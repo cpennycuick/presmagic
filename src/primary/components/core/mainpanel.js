@@ -14,10 +14,23 @@ define(function () {
 	c.prototype._prepare = function () {
 		parent._prepare.call(this);
 
-		var menuHeight = 32; // TODO constant
+		var splitView = new app.classes.SplitView.Vertical(this, 250, 'Fixed');
+		app.loadPanel('components/core/slidespanel', splitView.getContainerTwo())
+			.then(function (panel) {
+				panel.run();
+			}).done();
+
+		var self = this;
+
+		var menuHeight = $('#MainMenu').outerHeight();
 		var $content = $('#Content');
 		app.event.bind([app.EVENT_APPLICATION_START, app.EVENT_WINDOW_CHANGE], function () {
-			$content.height(window.innerHeight - menuHeight);
+			var contentHeight = window.innerHeight - menuHeight;
+			$content.height(contentHeight);
+			self.trigger(app.EVENT_PANEL_RESIZE, {
+				Width: window.innerWidth,
+				Height: contentHeight
+			});
 		});
 	};
 
