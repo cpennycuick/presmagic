@@ -22,8 +22,7 @@ git push origin [branchname]
 git branch -u origin/[branchname] [branchname]  
 
 **Checkout remote branch**  
-git checkout -b [branchname]  
-git branch -u origin/[branchname] [branchname]  
+git checkout -b [branchname] --track origin/[branchname]  
 
 **Show all branches local and remote**  
 git branch -avv  
