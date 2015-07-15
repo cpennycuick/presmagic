@@ -35,7 +35,7 @@ define(function () {
 					app.loadPanel('components/core/componentslist', $('#Content'))
 						.then(function (panel) {
 							panel.run();
-						});
+						}).done();
 				});
 			});
 		});

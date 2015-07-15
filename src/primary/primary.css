@@ -157,3 +157,36 @@ table.StandardList > tr > td {
 	padding: 2px 4px;
 }
 
+.SplitViewContainer {
+	font-size: 0px;
+	position: relative;
+}
+.SplitViewContainer > div {
+	font-size: initial;
+}
+.SplitViewContainer.Vertical > div {
+	display: inline-block;
+	vertical-align: top;
+}
+.Divider {
+	width: 2px;
+	height: 2px;
+	background: #CCC;
+	border: 1px solid #888;
+}
+.Divider.Vertical {
+	height: 100%;
+	border-width: 0px 1px 0px 1px;
+}
+.SplitViewContainer.Vertical.Dragging,
+.Divider.Vertical.Draggable {
+	cursor: ew-resize;
+}
+.Divider.Horizontal {
+	width: 100%;
+	border-width: 1px 0px 1px 0px;
+}
+.SplitViewContainer.Horizontal.Dragging,
+.Divider.Horizontal.Draggable {
+	cursor: ns-resize;
+}

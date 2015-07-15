@@ -11,9 +11,10 @@ define(function () {
 			.then(app.start)
 			.then(onLoadComplete)
 			.then(removeSplashLoader)
-			.done(function () {
+			.then(function () {
 				console.log('Startup done()');
-			});
+			})
+			.done();
 	};
 
 	var componentRegisterCompleteFn = null;
