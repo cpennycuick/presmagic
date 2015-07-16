@@ -19,8 +19,8 @@ define(function () {
 
 		var self = this;
 
-		var menuHeight = document.all.MainMenu.offsetHeight;
-		var content = document.all.Content;
+		var menuHeight = document.getElementById('MainMenu').offsetHeight;
+		var content = document.getElementById('Content');
 		app.event.bind([app.EVENT_APPLICATION_START, app.EVENT_WINDOW_CHANGE], function () {
 			var contentHeight = window.innerHeight - menuHeight;
 			content.style.width = window.innerWidth + 'px';

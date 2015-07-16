@@ -1,4 +1,11 @@
+/* global chrome */
+
 chrome.app.runtime.onLaunched.addListener(function(launchData) {
+	var events = {
+		controll: new chrome.Event(),
+		output: new chrome.Event(),
+	};
+
 	chrome.app.window.create('src/primary/primary.html', {
 		id: 'ControllWindowID',
 		innerBounds: {
@@ -6,34 +13,56 @@ chrome.app.runtime.onLaunched.addListener(function(launchData) {
 			minHeight: 600
 		}
 	}, function (createdWindow) {
+//		console.log('Controll:created', createdWindow);
+		createdWindow.contentWindow.onload = function () {
+//			console.log('Controll:onload');
+			this.message = {
+				receive: events.controll,
+				output: events.output
+			};
+		};
+
 		createdWindow.onClosed.addListener(function () {
 			closeRemainingWindows(createdWindow);
 		});
 	});
 
-	chrome.system.display.getInfo(function (displays) {
-		displays.forEach(function (display) {
-			if (!display.isPrimary) {
-				createOutputWindow(display.bounds);
-				return false; // break
-			}
-		});
-	});
+	createOutputWindow({}, events);
+
+//	chrome.system.display.getInfo(function (displays) {
+//		displays.forEach(function (display) {
+//			if (!display.isPrimary) {
+//				createOutputWindow(display.bounds, events);
+//				return false; // break
+//			}
+//		});
+//	});
 
 });
 
-function createOutputWindow(bounds) {
+function createOutputWindow(bounds, events) {
 	chrome.app.window.create('src/output/output.html', {
 		id: 'OutputWindowID',
 		innerBounds: {
 			width: 800,
 			height: 600
-		},
+		}
 //		frame: 'none',
 //		alwaysOnTopWindows: true, // dev
 //		outerBounds: bounds,
 //		resizable: false
 	}, function (createdWindow) {
+//		console.log('Output:created', createdWindow);
+//		console.log('Output:created', chrome.app.window.get('OutputWindowID'));
+//
+		createdWindow.contentWindow.onload = function () {
+//			console.log('Output:onload', this);
+			this.message = {
+				receive: events.output,
+				controll: events.controll
+			};
+		};
+
 //		createdWindow.fullscreen();
 		createdWindow.onClosed.addListener(function () {
 			closeRemainingWindows(createdWindow);

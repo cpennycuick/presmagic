@@ -1,21 +1,25 @@
+/* global PIXI, requirejs */
+
 requirejs.config({
-	baseUrl: 'js/output',
+	baseUrl: '/src/output',
 	paths: {
-		style: '/vendor/requirejs/module/css-0.1.8',
-		jquery: '/vendor/jquery/jquery-2.1.3.min'
+		jquery: '/vendor/jquery/jquery-2.1.3.min',
 	}
 });
 
-requirejs(['jquery'], function (jquery) {
+requirejs(['jquery', 'output'], function (jquery, output) {
 	window.$ = jquery;
+	window.output = output;
+
+	output.init();
 });
 
-document.oncontextmenu = function (event) {
-	event.preventDefault();
-	return false;
-};
-
-window.onKeyDown = function (event) {
-	event.preventDefault();
-	return false;
-};
+//document.oncontextmenu = function (event) {
+//	event.preventDefault();
+//	return false;
+//};
+//
+//window.onKeyDown = function (event) {
+//	event.preventDefault();
+//	return false;
+//};

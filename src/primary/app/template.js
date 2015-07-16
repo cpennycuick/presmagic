@@ -15,6 +15,7 @@ define(function () {
 		$(templateHTML).filter('[data-template]').each(function () {
 			var $this = $(this);
 			var name = $this.attr('data-template');
+			$this.removeAttr('data-template');
 			self._$templates[name] = $this;
 		});
 
