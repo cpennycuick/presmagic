@@ -1,6 +1,6 @@
 define(function () {
 
-	var c = function () {
+	app.Loader = function () {
 		this._progress = 0;
 		this._total = 0;
 
@@ -8,11 +8,11 @@ define(function () {
 		this._destroyed = false;
 	};
 
-	c.prototype.isComplete = function () {
+	app.Loader.prototype.isComplete = function () {
 		return ((this._total - this._progress) === 0);
 	};
 
-	c.prototype.add = function (inc) {
+	app.Loader.prototype.add = function (inc) {
 		inc = inc || 1;
 
 		this._total += inc;
@@ -29,14 +29,14 @@ define(function () {
 		})(this._incrementProgress.bind(this), inc);
 	};
 
-	c.prototype.startSimulateProgress = function () {
+	app.Loader.prototype.startSimulateProgress = function () {
 		setTimeout(
 			this._simulateProgress.bind(this),
 			500 + Math.floor(Math.random() * 1500)
 		);
 	}
 
-	c.prototype._simulateProgress = function () {
+	app.Loader.prototype._simulateProgress = function () {
 		if (this._destroyed) {
 			return;
 		}
@@ -50,7 +50,7 @@ define(function () {
 		this._update();
 	};
 
-	c.prototype.onUpdate = function (fn) {
+	app.Loader.prototype.onUpdate = function (fn) {
 		if (this._destroyed) {
 			return;
 		}
@@ -58,7 +58,7 @@ define(function () {
 		this._updateFns.push(fn);
 	};
 
-	c.prototype._incrementProgress = function () {
+	app.Loader.prototype._incrementProgress = function () {
 		if (this._destroyed) {
 			return;
 		}
@@ -67,7 +67,7 @@ define(function () {
 		this._update();
 	};
 
-	c.prototype._update = function () {
+	app.Loader.prototype._update = function () {
 		if (this._destroyed) {
 			return;
 		}
@@ -77,11 +77,11 @@ define(function () {
 		}, this);
 	};
 
-	c.prototype.destroy = function () {
+	app.Loader.prototype.destroy = function () {
 		this._updateFns = null;
 		this._destroyed = true;
 	};
 
-	return c;
+	return app.Loader;
 
 });

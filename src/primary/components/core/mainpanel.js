@@ -1,6 +1,6 @@
 define(function () {
 
-	var parentClass = app.classes.Panel;
+	var parentClass = app.Panel;
 	var parent = parentClass.prototype;
 
 	var c = function ($container) {
@@ -14,7 +14,7 @@ define(function () {
 	c.prototype._prepare = function () {
 		parent._prepare.call(this);
 
-		var splitView = new app.classes.SplitView.Vertical(this, 250, 'Fixed');
+		var splitView = new app.SplitView.Vertical(this, 250, 'Fixed');
 		splitView.loadPanelTwo('components/core/slidesmainpanel');
 
 		var self = this;

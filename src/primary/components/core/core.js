@@ -1,6 +1,6 @@
 define(function () {
 
-	var parentClass = app.classes.Component;
+	var parentClass = app.Component;
 	var parent = parentClass.prototype;
 
 	var c = function () {

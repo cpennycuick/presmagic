@@ -2,11 +2,11 @@ define(['style!mainmenu'], function () {
 
 	var itemIndex = 0;
 
-	function MainMenuBuilder() {
+	app.MainMenuBuilder = function () {
 		this._items = [];
-	}
+	};
 
-	MainMenuBuilder.prototype.add = function (name, priority, setupFn) {
+	app.MainMenuBuilder.prototype.add = function (name, priority, setupFn) {
 		var item = new MenuItem(name, Math.min(99, Math.max(0, priority)));
 
 		if ($.isFunction(setupFn)) {
@@ -16,7 +16,7 @@ define(['style!mainmenu'], function () {
 		this._items.push(item);
 	};
 
-	MainMenuBuilder.prototype.render = function () {
+	app.MainMenuBuilder.prototype.render = function () {
 		var $menu = $('<ul id="MainMenuList"></ul>');
 
 		this._items.sort(function (itemA, itemB) {
@@ -33,7 +33,7 @@ define(['style!mainmenu'], function () {
 		return $menu;
 	}
 
-	MainMenuBuilder.prototype._setupEvents = function ($menu) {
+	app.MainMenuBuilder.prototype._setupEvents = function ($menu) {
 		var self = this;
 
 		$menu.on('click', 'li > .Item',  function () {
@@ -55,12 +55,12 @@ define(['style!mainmenu'], function () {
 		});
 	};
 
-	MainMenuBuilder.prototype._closeAll = function ($root) {
+	app.MainMenuBuilder.prototype._closeAll = function ($root) {
 		$root.find('.Open').removeClass('Open');
 		$('body').off('click.topmenu');
 	}
 
-	MainMenuBuilder.prototype._openMenu = function ($root, $li) {
+	app.MainMenuBuilder.prototype._openMenu = function ($root, $li) {
 		$li.addClass('Open');
 
 		var self = this;
@@ -154,6 +154,6 @@ define(['style!mainmenu'], function () {
 		return $item;
 	};
 
-	return MainMenuBuilder;
+	return app.MainMenuBuilder;
 
 });

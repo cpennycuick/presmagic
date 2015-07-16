@@ -3,7 +3,7 @@ define(function () {
 	var templates = {};
 	var $empty = $();
 
-	var c = function (templateHTML) {
+	app.Template = function (templateHTML) {
 		if (templateHTML in templates) {
 			this._$templates = templates[templateHTML];
 			return;
@@ -21,7 +21,7 @@ define(function () {
 		templates[templateHTML] = self._$templates;
 	};
 
-	c.prototype.get = function (template, filter) {
+	app.Template.prototype.get = function (template, filter) {
 		if (!(template in this._$templates)) {
 			return $empty;
 		}
@@ -32,9 +32,9 @@ define(function () {
 			$template = $template.find(filter);
 		}
 
-		return $template.clone();;
+		return $template.clone();
 	};
 
-	return c;
+	return app.Template;
 
 });

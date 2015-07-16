@@ -1,6 +1,6 @@
 define(function () {
 
-	var parentClass = app.classes.Panel;
+	var parentClass = app.Panel;
 	var parent = parentClass.prototype;
 
 	var c = function ($container) {

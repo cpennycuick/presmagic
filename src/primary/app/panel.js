@@ -1,12 +1,12 @@
 define(['app/layouts'], function (appLayouts) {
 
-	var c = function ($root, options) {
+	app.Panel = function ($root, options) {
 		this._$root = $root;
 		this._options = options || {};
-		this._event = new app.classes.EventManager();
+		this._event = new app.EventManager();
 	};
 
-	c.prototype.run = function () {
+	app.Panel.prototype.run = function () {
 		app.event.trigger(app.EVENT_PANEL_SETUP, {Panel: this});
 		this._setup();
 
@@ -16,23 +16,23 @@ define(['app/layouts'], function (appLayouts) {
 		app.event.trigger(app.EVENT_PANEL_LOADED, {Panel: this});
 	};
 
-	c.prototype.startLoading = function () {
+	app.Panel.prototype.startLoading = function () {
 		this._layout.startLoading();
 	};
 
-	c.prototype.endLoading = function () {
+	app.Panel.prototype.endLoading = function () {
 		this._layout.endLoading();
 	}
 
-	c.prototype.getContainer = function () {
+	app.Panel.prototype.getContainer = function () {
 		return this._layout.getContainer();
 	}
 
-	c.prototype._setup = function () {
+	app.Panel.prototype._setup = function () {
 		this._setupLayout();
 	};
 
-	c.prototype._setupLayout = function () {
+	app.Panel.prototype._setupLayout = function () {
 		var options = this._options;
 		var layoutClass = appLayouts[options.Layout];
 		this._layout = new layoutClass(this._$root, options.LayoutOptions);
@@ -40,22 +40,22 @@ define(['app/layouts'], function (appLayouts) {
 		this._layout.wrap();
 	};
 
-	c.prototype._prepare = function () {
+	app.Panel.prototype._prepare = function () {
 
 	};
 
-	c.prototype.$ = function (selector) {
+	app.Panel.prototype.$ = function (selector) {
 		return this.getContainer().find(selector);
 	};
-	
-	c.prototype.bind = function () {
+
+	app.Panel.prototype.bind = function () {
 		this._event.bind.apply(this._event, arguments);
 	};
-	
-	c.prototype.trigger = function () {
+
+	app.Panel.prototype.trigger = function () {
 		this._event.trigger.apply(this._event, arguments);
 	};
-	
-	return c;
+
+	return app.Panel;
 
 });
