@@ -15,18 +15,17 @@ define(function () {
 		parent._prepare.call(this);
 
 		var splitView = new app.classes.SplitView.Vertical(this, 250, 'Fixed');
-		app.loadPanel('components/core/slidespanel', splitView.getContainerTwo())
-			.then(function (panel) {
-				panel.run();
-			}).done();
+		splitView.loadPanelTwo('components/core/slidesmainpanel');
 
 		var self = this;
 
-		var menuHeight = $('#MainMenu').outerHeight();
-		var $content = $('#Content');
+		var menuHeight = document.all.MainMenu.offsetHeight;
+		var content = document.all.Content;
 		app.event.bind([app.EVENT_APPLICATION_START, app.EVENT_WINDOW_CHANGE], function () {
 			var contentHeight = window.innerHeight - menuHeight;
-			$content.height(contentHeight);
+			content.style.width = window.innerWidth + 'px';
+			content.style.height = contentHeight + 'px';
+
 			self.trigger(app.EVENT_PANEL_RESIZE, {
 				Width: window.innerWidth,
 				Height: contentHeight

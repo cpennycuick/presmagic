@@ -17,7 +17,7 @@ requirejs(['jquery', 'Q', 'app', 'startup', 'style!primary'], function (jquery, 
 	// TODO is this the right place?
 	Q.longStackSupport = true;
 	Q.onerror = function (e) {
-		console.error('Q.onerror', this, e, arguments);
+		console.error('Q.onerror', e, e.stack);
 	};
 
 	startup();

@@ -53,6 +53,8 @@ define(function () {
 					console.log('Component', component._name, 'register()');
 				});
 
+			promise.done();
+
 			promises.push(promise);
 		});
 
@@ -67,6 +69,8 @@ define(function () {
 				.then(function() {
 					console.log('Component', component._name, 'load()');
 				});
+
+			promise.done();
 
 			promises.push(promise);
 		});
