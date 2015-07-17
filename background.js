@@ -3,7 +3,7 @@
 chrome.app.runtime.onLaunched.addListener(function(launchData) {
 	var events = {
 		controll: new chrome.Event(),
-		output: new chrome.Event(),
+		output: new chrome.Event()
 	};
 
 	chrome.app.window.create('src/primary/primary.html', {
@@ -13,9 +13,7 @@ chrome.app.runtime.onLaunched.addListener(function(launchData) {
 			minHeight: 600
 		}
 	}, function (createdWindow) {
-//		console.log('Controll:created', createdWindow);
 		createdWindow.contentWindow.onload = function () {
-//			console.log('Controll:onload');
 			this.message = {
 				receive: events.controll,
 				output: events.output
@@ -52,11 +50,7 @@ function createOutputWindow(bounds, events) {
 //		outerBounds: bounds,
 //		resizable: false
 	}, function (createdWindow) {
-//		console.log('Output:created', createdWindow);
-//		console.log('Output:created', chrome.app.window.get('OutputWindowID'));
-//
 		createdWindow.contentWindow.onload = function () {
-//			console.log('Output:onload', this);
 			this.message = {
 				receive: events.output,
 				controll: events.controll

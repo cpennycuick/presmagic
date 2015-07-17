@@ -11,7 +11,6 @@ define(function () {
 	app.EVENT_PANEL_RESIZE = 'Panel:Resize';
 
 	app.components = [];
-	app.classes = {};
 	app.event = null;
 	app.loader = null;
 

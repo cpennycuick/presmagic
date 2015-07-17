@@ -1,9 +1,9 @@
 define(['text!components/core/slides.html', 'style!components/core/slides'], function (templateHTML) {
 
-	var parentClass = app.classes.Panel;
+	var parentClass = app.Panel;
 	var parent = parentClass.prototype;
 
-	var template = new app.classes.Template(templateHTML);
+	var template = new app.Template(templateHTML);
 
 	var c = function ($container) {
 		parent.constructor.call(this, $container, {
