@@ -5,12 +5,14 @@ requirejs.config({
 		style: '/vendor/requirejs/module/css-0.1.8',
 
 		jquery: '/vendor/jquery/jquery-2.1.3.min',
+		dexie: '/vendor/dexie/dexie-20141209.min',
 		Q: '/vendor/q/q-1.4.1'
 	}
 });
 
-requirejs(['jquery', 'Q', 'app', 'startup', 'style!primary'], function (jquery, Q, app, startup) {
+requirejs(['jquery', 'dexie', 'Q', 'app', 'startup', 'style!primary'], function (jquery, dexie, Q, app, startup) {
 	window.$ = jquery;
+	window.Dexie = dexie;
 	window.Q = Q;
 	window.app = app;
 

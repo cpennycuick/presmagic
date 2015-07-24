@@ -1,6 +1,8 @@
-define(function () {
+define(['db'], function (db) {
 
 	var app = {};
+
+	app.db = db;
 
 	app.EVENT_APPLICATION_START = 'Application:Start';
 	app.EVENT_APPLICATION_SETUP_MAINMENU = 'Application:SetupMainMenu';
