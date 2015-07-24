@@ -20,11 +20,19 @@ define(['text!components/core/slides.html', 'style!components/core/slides'], fun
 			.appendTo(this.getContainer());
 
 		var self = this;
+		var currentIndex = null;
 		$panel.on('click', '.Slide', function (event) {
-			var index = $(this).attr('data-index');
-			self._showText(slides[index]);
 			$panel.find('.Active').removeClass('Active');
-			$(this).addClass('Active');
+
+			var index = $(this).attr('data-index');
+			if (index === currentIndex) {
+				self._showText('');
+				currentIndex = null;
+			} else {
+				self._showText(slides[index]);
+				$(this).addClass('Active');
+				currentIndex = index;
+			}
 		});
 
 		this._populateList($panel);

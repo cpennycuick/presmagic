@@ -16,11 +16,11 @@ define(function () {
 	};
 
 	c.prototype.register = function () {
-		return Q.delay(500);
+//		return Q.delay(500);
 	};
 
 	c.prototype.load = function () {
-		return Q.delay(100);
+//		return Q.delay(100);
 	};
 
 	return c;
