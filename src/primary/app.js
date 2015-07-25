@@ -1,12 +1,11 @@
-define(['db'], function (db) {
+define(function () {
 
 	var app = {};
-
-	app.db = db;
 
 	app.EVENT_APPLICATION_START = 'Application:Start';
 	app.EVENT_APPLICATION_SETUP_MAINMENU = 'Application:SetupMainMenu';
 	app.EVENT_WINDOW_CHANGE = 'Window:Change';
+	app.EVENT_ROOTPANEL_LOADED = 'RootPanel:Loaded';
 	app.EVENT_PANEL_SETUP = 'Panel:Setup';
 	app.EVENT_PANEL_PREPARE = 'Panel:Prepare';
 	app.EVENT_PANEL_LOADED = 'Panel:Loaded';
@@ -51,6 +50,7 @@ define(['db'], function (db) {
 				'app/template',
 				'app/panel',
 				'app/splitview',
+				'app/database',
 				'app/loader'
 			];
 

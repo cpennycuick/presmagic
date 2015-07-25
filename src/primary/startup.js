@@ -107,7 +107,7 @@ define(function () {
 		var defer = Q.defer();
 
 		defer.promise
-			.timeout(5000)
+			.timeout(1000 * 30)
 			.fail(function (err) {
 				console.log('Failed to finish loading.');
 				clearInterval(interval);

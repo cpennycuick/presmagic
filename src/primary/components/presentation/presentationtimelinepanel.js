@@ -13,11 +13,6 @@ define(function () {
 
 	c.prototype._prepare = function () {
 		parent._prepare.call(this);
-
-		var splitView = new app.SplitView.Horizontal(this, 30, 'Percent', false, 'Two');
-		splitView.loadPanelOne('components/core/slideslistpanel');
-		splitView.loadPanelTwo('components/core/slidespanel');
-
 	};
 
 	return c;

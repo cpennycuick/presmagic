@@ -14,9 +14,6 @@ define(function () {
 	c.prototype._prepare = function () {
 		parent._prepare.call(this);
 
-		var splitView = new app.SplitView.Vertical(this, 250, 'Fixed');
-		splitView.loadPanelTwo('components/core/slidesmainpanel');
-
 		var self = this;
 
 		var menuHeight = document.getElementById('MainMenu').offsetHeight;
@@ -31,6 +28,8 @@ define(function () {
 				Height: contentHeight
 			});
 		});
+
+		app.event.trigger(app.EVENT_ROOTPANEL_LOADED);
 	};
 
 	return c;

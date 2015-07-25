@@ -8,7 +8,9 @@
 		}
 	},
 	"permissions": [
-		"system.display"
+		"system.display",
+		"unlimitedStorage",
+		"storage"
 	],
 	"offline_enabled": true,
 	"manifest_version": 2

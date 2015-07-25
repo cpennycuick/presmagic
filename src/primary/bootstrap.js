@@ -4,15 +4,19 @@ requirejs.config({
 		text: '/vendor/requirejs/module/text-2.0.13',
 		style: '/vendor/requirejs/module/css-0.1.8',
 
-		jquery: '/vendor/jquery/jquery-2.1.3.min',
-		dexie: '/vendor/dexie/dexie-20141209.min',
-		Q: '/vendor/q/q-1.4.1'
+		'Dexie': '/vendor/dexie/dexie-1.0.4.min',
+		'jQuery': '/vendor/jquery/jquery-2.1.3.min',
+		'Q': '/vendor/q/q-1.4.1'
+	},
+	shim: {
+		'Dexie': {
+			exports: 'Dexie'
+		}
 	}
 });
 
-requirejs(['jquery', 'dexie', 'Q', 'app', 'startup', 'style!primary'], function (jquery, dexie, Q, app, startup) {
-	window.$ = jquery;
-	window.Dexie = dexie;
+requirejs(['jQuery', 'Q', 'Dexie', 'app', 'startup', 'style!primary'], function (jquery, Q, Dexie, app, startup) {
+//	window.Dexie = Dexie;
 	window.Q = Q;
 	window.app = app;
 

@@ -43,10 +43,9 @@ define(function () {
 	}
 
 	function handleEvent(eventType) {
+		console.log(arguments);
 		if (eventType === 'ShowText') {
 			showText(arguments[1]);
-		} else {
-			console.log(arguments);
 		}
 	};
 
@@ -124,7 +123,7 @@ define(function () {
 			align: 'center',
 			strokeThickness: 4,
 			wordWrap: true,
-			wordWrapWidth: 780
+			wordWrapWidth: renderer.width - 20
 		});
 
 		stage.addChild(element);

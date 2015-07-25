@@ -22,7 +22,7 @@ define(function () {
 	};
 
 	c.prototype.load = function () {
-		return app.loadPanel('components/core/mainpanel', $('#Content'))
+		return app.loadPanel('components/core/rootpanel', $('#Content'))
 			.then(function (panel) {
 				panel.run();
 			});

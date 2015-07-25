@@ -1,28 +1,37 @@
-define(['dexie'], function (Dexie) {
+define(function () {
+
 	Dexie.Promise.on('error', function (e) {
 		console.error('Dixie:', e);
 	});
 
-	var db = new Dexie('presmagic');
+	app.db = new Dexie('presmagic');
 
-	db.delete();
+//	app.db.delete();
 
-	db.version(1).stores({
+	app.db.version(1).stores({
 		presentation: "++ID,&Name",
 		frame: "++ID,PresentationID,Group,Text"
 	});
 
-	db.open();
+	app.db.open();
 
-	db.transaction('rw', [db.presentation, db.frame], function () {
-		db.presentation.add({Name: "Cornerstone"}).then(function (result) {
-			debugger;
-		});
-		db.presentation.add({Name: "Forever Reign"}).then(function () {
-			debugger;
-		});
-	});
+//	app.db.transaction('rw', [app.db.presentation, app.db.frame], function () {
+//		app.db.presentation.add({Name: "Cornerstone"}).then(function (id) {
+//			app.db.frame.add({PresentationID: id, Text: "Christ alone; cornerstone"});
+//			app.db.frame.add({PresentationID: id, Text: "Weak made strong in the Saviour's love"});
+//			app.db.frame.add({PresentationID: id, Text: "Through the storm, He is Lord"});
+//			app.db.frame.add({PresentationID: id, Text: "Lord of all"});
+//		});
+//		app.db.presentation.add({Name: "Forever Reign"}).then(function (id) {
+//			app.db.frame.add({PresentationID: id, Text: "Oh, I'm running to Your arms"});
+//			app.db.frame.add({PresentationID: id, Text: "I'm running to Your arms"});
+//			app.db.frame.add({PresentationID: id, Text: "The riches of your love"});
+//			app.db.frame.add({PresentationID: id, Text: "Will always be enough"});
+//			app.db.frame.add({PresentationID: id, Text: "Nothing compares to Your embrace"});
+//			app.db.frame.add({PresentationID: id, Text: "Light of the world forever reign"});
+//		});
+//	});
 
-	return db;
+	return app.db;
 
 });

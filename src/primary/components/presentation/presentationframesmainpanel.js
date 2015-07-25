@@ -14,7 +14,10 @@ define(function () {
 	c.prototype._prepare = function () {
 		parent._prepare.call(this);
 
-		this.getContainer().append('<h1>Slides</h1>');
+		var splitView = new app.SplitView.Horizontal(this, 30, 'Percent', false, 'Two');
+		splitView.loadPanelOne('components/presentation/presentationframespanel');
+		splitView.loadPanelTwo('components/presentation/presentationtimelinepanel');
+
 	};
 
 	return c;

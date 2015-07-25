@@ -1,0 +1,82 @@
+.Presentation.FramesPanel {
+	padding: 3px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 100%;
+	box-sizing: border-box;
+	font-size: 0px;
+}
+.Presentation.FramesPanel .Frame {
+	width: 140px;
+	height: 100px;
+	background-color: black;
+	border-radius: 2px;
+	display: inline-block;
+	margin: 5px;
+	cursor: pointer;
+	color: white;
+	font-size: 12px;
+	padding: 6px;
+	box-sizing: border-box;
+	vertical-align: top;
+	text-align: left;
+	position: relative;
+	opacity: 0.6;
+}
+.Presentation.FramesPanel .Frame:hover {
+	opacity: 0.8;
+}
+.Presentation.FramesPanel .Frame.Active {
+	opacity: 1;
+	box-shadow: 0px 0px 6px 0px #444;
+}
+.Presentation.FramesPanel .Frame.Active:before {
+	content: "";
+	display: block;
+	width: 6px;
+	height: 6px;
+	border-radius: 6px;
+	position: absolute;
+	top: 3px;
+	right: 3px;
+	background-color: red;
+	border: 1px solid darkred;
+}
+
+.Presentation.ListPanel {
+	position: relative;
+	height: 100%;
+}
+.Presentation.ListPanel .List {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+}
+.Presentation.ListPanel .AddItem {
+	position: absolute;
+	bottom: 4px;
+	left: 0px;
+	width: 100%;
+	height: 24px;
+	line-height: 22px;
+	cursor: pointer;
+	background-color: #DDD;
+	border: 1px solid #AAA;
+	border-width: 1px 0px;
+	padding: 0px 12px;
+	box-sizing: border-box;
+	font-size: 12px;
+}
+.Presentation.ListPanel .AddItem:hover {
+	background-color: #CCC;
+}
+.Presentation.ListPanel .List li {
+	margin: 0px;
+	padding: 2px 12px;
+	background-color: #DDD;
+	border-bottom: 1px solid #CCC;
+	cursor: pointer;
+}
+.Presentation.ListPanel .List li:hover {
+	background-color: #FFF;
+}
