@@ -3,10 +3,11 @@ define(function () {
 	var parentClass = app.Panel;
 	var parent = parentClass.prototype;
 
-	var c = function ($container) {
+	var c = function ($container, options, parentPanel) {
+		this._name = 'TimeLinePanel';
 		parent.constructor.call(this, $container, {
 			Layout: 'Standard'
-		});
+		}, parentPanel);
 	};
 
 	c.prototype = new parentClass();

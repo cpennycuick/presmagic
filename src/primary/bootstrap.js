@@ -4,6 +4,8 @@ requirejs.config({
 		text: '/vendor/requirejs/module/text-2.0.13',
 		style: '/vendor/requirejs/module/css-0.1.8',
 
+		'DI': '/src/displayinstructions',
+
 		'Dexie': '/vendor/dexie/dexie-1.0.4.min',
 		'jQuery': '/vendor/jquery/jquery-2.1.3.min',
 		'Q': '/vendor/q/q-1.4.1'
@@ -27,6 +29,10 @@ requirejs(['jQuery', 'Q', 'Dexie', 'app', 'startup', 'style!primary'], function 
 	};
 
 	startup();
+});
+
+requirejs(['DI'], function () {
+	console.log(window.DI);
 });
 
 // TODO is this the right place / right way?

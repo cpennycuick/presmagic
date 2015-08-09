@@ -6,10 +6,11 @@ define(['text!components/presentation/presentation.html'], function (templateHTM
 	var template = new app.Template(templateHTML);
 	var $oSlide = template.get('PresentationFrame');
 
-	var c = function ($container) {
+	var c = function ($container, options, parentPanel) {
+		this._name = 'FramesPanel';
 		parent.constructor.call(this, $container, {
 			Layout: 'Standard'
-		});
+		}, parentPanel);
 	};
 
 	c.prototype = new parentClass();
@@ -49,7 +50,9 @@ define(['text!components/presentation/presentation.html'], function (templateHTM
 	};
 
 	c.prototype._showText = function (text) {
-		message.output.dispatch('ShowText', text);
+		var text = DI.A.Text.Add({Text: text, Opacity: 0});
+		text.queue(DI.A.Text.Animate(text.getID(), {Opacity: 1}));
+		text.send();
 	};
 
 	c.prototype._updateFrames = function () {

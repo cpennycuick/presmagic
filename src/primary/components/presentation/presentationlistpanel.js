@@ -6,10 +6,11 @@ define(['text!components/presentation/presentation.html'], function (templateHTM
 	var template = new app.Template(templateHTML);
 	var $oItem = template.get('PresentationListItem').find('li');
 
-	var c = function ($container) {
+	var c = function ($container, options, parentPanel) {
+		this._name = 'ListPanel';
 		parent.constructor.call(this, $container, {
 			Layout: 'Standard'
-		});
+		}, parentPanel);
 	};
 
 	c.prototype = new parentClass();
@@ -35,6 +36,7 @@ define(['text!components/presentation/presentation.html'], function (templateHTM
 				PresentationID: self._list[index].ID
 			});
 
+			self.$('.Active').removeClass('Active');
 			$this.addClass('Active');
 		});
 

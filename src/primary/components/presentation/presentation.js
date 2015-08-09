@@ -16,8 +16,8 @@ define(function () {
 	};
 
 	c.prototype.register = function () {
-		app.event.bind(app.EVENT_ROOTPANEL_LOADED, function () {
-			app.loadPanel('components/presentation/presentationpanel', $('#Content'))
+		app.event.bind(app.EVENT_ROOTPANEL_LOADED, function (data) {
+			app.loadPanel('components/presentation/presentationpanel', $('#Content'), data.Panel)
 				.then(function (panel) {
 					panel.run();
 				});

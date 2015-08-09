@@ -1,9 +1,29 @@
-define(['app/layouts'], function (appLayouts) {
+define(['app/layouts', 'app/mixin/eventmanager'], function (appLayouts, appMixinEventManager) {
 
-	app.Panel = function ($root, options) {
+	app.Panel = function ($root, options, parentPanel) {
 		this._$root = $root;
 		this._options = options || {};
-		this._event = new app.EventManager();
+		this._parent = parentPanel;
+
+		this._loaded = false;
+
+		appMixinEventManager.call(this);
+
+		if (this._parent) {
+			var self = this;
+			this._parent.event.bind(app.EVENT_VIEW_RESIZE, function (data) {
+				if (!self._loaded) {
+					return;
+				}
+
+				var container = self.getContainer()[0];
+				console.log('panel resize', data);
+				self.event.trigger(app.EVENT_VIEW_RESIZE, {
+					Width: container.offsetWidth,
+					Height: container.offsetHeight
+				});
+			});
+		}
 	};
 
 	app.Panel.prototype.run = function () {
@@ -13,6 +33,7 @@ define(['app/layouts'], function (appLayouts) {
 		app.event.trigger(app.EVENT_PANEL_PREPARE, {Panel: this});
 		this._prepare();
 
+		this._loaded = true;
 		app.event.trigger(app.EVENT_PANEL_LOADED, {Panel: this});
 	};
 
@@ -22,11 +43,11 @@ define(['app/layouts'], function (appLayouts) {
 
 	app.Panel.prototype.endLoading = function () {
 		this._layout.endLoading();
-	}
+	};
 
 	app.Panel.prototype.getContainer = function () {
 		return this._layout.getContainer();
-	}
+	};
 
 	app.Panel.prototype._setup = function () {
 		this._setupLayout();
@@ -46,14 +67,6 @@ define(['app/layouts'], function (appLayouts) {
 
 	app.Panel.prototype.$ = function (selector) {
 		return this.getContainer().find(selector);
-	};
-
-	app.Panel.prototype.bind = function () {
-		this._event.bind.apply(this._event, arguments);
-	};
-
-	app.Panel.prototype.trigger = function () {
-		this._event.trigger.apply(this._event, arguments);
 	};
 
 	return app.Panel;

@@ -132,7 +132,7 @@ define(function () {
 		app.loader.destroy();
 		app.loader = null;
 
-		$('#SplashScreen').fadeOut(1000, function () {
+		$('#SplashScreen').fadeOut(100, function () {
 			$(this).remove();
 		});
 	}

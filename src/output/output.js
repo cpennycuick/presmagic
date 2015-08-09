@@ -1,7 +1,7 @@
 define(function () {
 
 	var renderer = PIXI.autoDetectRenderer(800, 600, {
-		antialias: true
+//		antialias: true
 	});
 
 	var stage = new PIXI.Container();
@@ -9,7 +9,7 @@ define(function () {
 	return {
 		init: function () {
 			$(function () {
-				message.receive.addListener(handleEvent);
+				message.receive.addListener(runActions);
 				document.body.appendChild(renderer.view);
 
 				init();
@@ -21,37 +21,35 @@ define(function () {
 
 	function run() {
 		renderer.render(stage);
-		runUpdateCallbacks();
+
+		var children = stage.children.slice();
+		for (var i = 0; i < children.length; i++) {
+			if (children[i].update) {
+				children[i].update();
+			}
+		}
+
 		requestAnimationFrame(run);
 	}
 
-	var onUpdateCallbacks;
-	function onUpdate(fn) {
-		onUpdateCallbacks.push(fn);
-	}
-	function runUpdateCallbacks() {
-		if (!onUpdateCallbacks.length) {
-			return;
-		}
+	function runActions(actions) {
+		for (var i in actions) {
+			console.log(actions[i]);
+			switch (actions[i].inst) {
+				case DI.A.Text.Add.INST:
+					showText(actions[i].prop.Text);
+					break;
+			}
 
-		var onUpdateCallbacksCopy = onUpdateCallbacks.slice();
-		onUpdateCallbacks = [];
-
-		for (var i =0; i < onUpdateCallbacksCopy.length; i++) {
-			onUpdateCallbacksCopy[i]();
-		}
-	}
-
-	function handleEvent(eventType) {
-		console.log(arguments);
-		if (eventType === 'ShowText') {
-			showText(arguments[1]);
+			// TODO run queued actions in promise of completed parent action
+			if (actions[i].queue && actions[i].queue.length) {
+				runActions(actions[i].queue);
+			}
 		}
 	};
 
-	var currentText;
 	function init() {
-		onUpdateCallbacks = [];
+		textElements = 0;
 
 		window.onresize = function () {
 			renderer.resize(window.innerWidth, window.innerHeight);
@@ -59,66 +57,78 @@ define(function () {
 		window.onresize();
 	}
 
+	var activeText = null;
+	var textElements = 0;
 	function showText(text) {
 		if (!text || !text.length) {
-			fadeOut(currentText, function () {
-				currentText = null;
+			fadeOut(activeText).then(function () {
+				if ((--textElements) <= 1) {
+					activeText = null;
+				}
 			});
 
 			return;
 		}
 
 		var element = createText(text);
-
-//		element.visible = false;
 		element.alpha = 0;
 
-		onUpdate(function () {
-			var bounds = element.getLocalBounds();
-			element.x = renderer.width / 2 - bounds.width / 2;
-			element.y = renderer.height / 2 - bounds.height / 2;
+		if (activeText) {
+			fadeOut(activeText).then(function () {
+				if ((--textElements) <= 1) {
+					fadeIn(activeText);
+				}
+			});
+		} else {
+			fadeIn(element);
+		}
 
-			if (currentText) {
-				fadeOut(currentText, function () {
-					fadeIn(element);
-				});
-			} else {
-				fadeIn(element);
-			}
+		activeText = element;
+		textElements += 1;
 
-			currentText = element;
-		});
+		renderer.render(stage);
+
+		var bounds = element.getLocalBounds();
+		element.x = renderer.width / 2 - bounds.width / 2;
+		element.y = renderer.height / 2 - bounds.height / 2;
 	};
 
-	function fadeIn(element, doneFn) {
-		var fadeInc = 0.1;
-		if ((element.alpha + fadeInc) >= 1) {
-			doneFn && doneFn();
-			return;
-		}
+	function fadeIn(element) {
+		element.alpha = 0;
 
-		element.alpha += fadeInc;
-		onUpdate(function () {
-			fadeIn(element, doneFn);
-		});
+		var dfd = Q.defer();
+		element.update = function () {
+			element.alpha += 0.05;
+
+			if (element.alpha >= 1) {
+				element.alpha = 1;
+				element.update = null;
+				dfd.resolve();
+			}
+		};
+
+		return dfd.promise;
 	}
 
-	function fadeOut(element, doneFn) {
-		var fadeInc = 0.1;
-		if ((element.alpha - fadeInc) < 0) {
-			doneFn && doneFn();
-			return;
-		}
+	function fadeOut(element) {
+		var dfd = Q.defer();
+		element.update = function () {
+			element.alpha -= 0.05;
 
-		element.alpha -= fadeInc;
-		onUpdate(function () {
-			fadeOut(element, doneFn);
-		});
+			if (element.alpha <= 0) {
+				element.alpha = 0;
+				element.update = null;
+				stage.removeChild(element);
+				dfd.resolve();
+			}
+		};
+
+		return dfd.promise;
 	}
 
 	function createText(text) {
 		var element = new PIXI.Text(text, {
-			font: '48px Calibri',
+			font: '48px Arial',
 			fill: '#FFFFFF',
 			align: 'center',
 			strokeThickness: 4,

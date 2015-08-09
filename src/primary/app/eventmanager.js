@@ -19,9 +19,9 @@ define(function () {
 		this._makeArray(names).forEach(function (name) {
 			if (name in this._events) {
 				for (var i in this._events[name]) {
+					console.log('Event trigger', name, args);
 					var fnArgs = (args ? $.extend({}, args) : {});
 					this._events[name][i](fnArgs);
-					console.log('Event trigger', name);
 				}
 			}
 		}, this);

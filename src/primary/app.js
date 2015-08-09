@@ -5,11 +5,11 @@ define(function () {
 	app.EVENT_APPLICATION_START = 'Application:Start';
 	app.EVENT_APPLICATION_SETUP_MAINMENU = 'Application:SetupMainMenu';
 	app.EVENT_WINDOW_CHANGE = 'Window:Change';
+	app.EVENT_VIEW_RESIZE = 'View:Resize';
 	app.EVENT_ROOTPANEL_LOADED = 'RootPanel:Loaded';
 	app.EVENT_PANEL_SETUP = 'Panel:Setup';
 	app.EVENT_PANEL_PREPARE = 'Panel:Prepare';
 	app.EVENT_PANEL_LOADED = 'Panel:Loaded';
-	app.EVENT_PANEL_RESIZE = 'Panel:Resize';
 
 	app.components = [];
 	app.event = null;
@@ -25,10 +25,10 @@ define(function () {
 		setup.start();
 	};
 
-	app.loadPanel = function (name, $container) {
+	app.loadPanel = function (name, $container, parent) {
 		return requireOneDeferred(name)
 			.then(function (panelClass) {
-				return new panelClass($container);
+				return new panelClass($container, {}, parent);
 			});
 	};
 
@@ -60,11 +60,8 @@ define(function () {
 			app.event = new app.EventManager();
 			app.loader = new app.Loader();
 
-			$(window).resize(function (event) {
-				app.event.trigger(app.EVENT_WINDOW_CHANGE, {
-					type: 'resize',
-					event: event
-				});
+			$(window).resize(function () {
+				app.event.trigger(app.EVENT_WINDOW_CHANGE);
 			});
 
 			mainmenu.setup();

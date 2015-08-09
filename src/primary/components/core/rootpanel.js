@@ -23,13 +23,15 @@ define(function () {
 			content.style.width = window.innerWidth + 'px';
 			content.style.height = contentHeight + 'px';
 
-			self.trigger(app.EVENT_PANEL_RESIZE, {
+			self.event.trigger(app.EVENT_VIEW_RESIZE, {
 				Width: window.innerWidth,
 				Height: contentHeight
 			});
 		});
 
-		app.event.trigger(app.EVENT_ROOTPANEL_LOADED);
+		app.event.trigger(app.EVENT_ROOTPANEL_LOADED, {
+			Panel: this
+		});
 	};
 
 	return c;

@@ -3,12 +3,14 @@
 requirejs.config({
 	baseUrl: '/src/output',
 	paths: {
-		jquery: '/vendor/jquery/jquery-2.1.3.min',
+		'DI': '/src/displayinstructions',
+		'jQuery': '/vendor/jquery/jquery-2.1.3.min',
+		'Q': '/vendor/q/q-1.4.1'
 	}
 });
 
-requirejs(['jquery', 'output'], function (jquery, output) {
-	window.$ = jquery;
+requirejs(['jQuery','Q', 'DI', 'output'], function (jQuery, Q, DI, output) {
+	window.Q = Q;
 	window.output = output;
 
 	output.init();

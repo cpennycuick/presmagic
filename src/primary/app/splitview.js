@@ -1,10 +1,11 @@
-define(function () {
+define(['app/mixin/eventmanager'], function (appMixinEventManager) {
 
-    var SplitView = function (panel, value, valueType, dragable, primary, orientation) {
+    var SplitView = function (parent, $container, value, valueType, dragable, primary, orientation) {
 		if (!arguments.length) {
 			return;
 		}
 
+		this._parent = parent;
         this._value = value;
         this._valueType = valueType;
 		this._dragable = dragable;
@@ -20,10 +21,10 @@ define(function () {
 		);
 
         this._result = null;
-		this._panelOne = null;
-		this._panelTwo = null;
+		this._childOne = null;
+		this._childTwo = null;
 
-        this._$container = panel.getContainer()
+        this._$container = $container
 			.addClass('SplitViewContainer')
 			.addClass(this._orientation);
 
@@ -33,7 +34,10 @@ define(function () {
 
 		this._setupDivider();
 
-        panel.bind(app.EVENT_PANEL_RESIZE, this._resize.bind(this));
+		appMixinEventManager.call(this);
+
+        this._parent.event.bind(app.EVENT_VIEW_RESIZE, this._resize.bind(this));
+        this.event.bind(app.EVENT_VIEW_RESIZE, this._resize.bind(this));
     };
 
 	SplitView.PRIMARY_ONE = 'One';
@@ -52,9 +56,9 @@ define(function () {
 
     SplitView.prototype.loadPanelOne = function (name) {
 		var self = this;
-        app.loadPanel(name, this._$one)
+        app.loadPanel(name, this._$one, this)
 			.then(function (panel) {
-				self._panelOne = panel;
+				self._childOne = panel;
 				self.update();
 
 				panel.run();
@@ -63,14 +67,50 @@ define(function () {
 
     SplitView.prototype.loadPanelTwo = function (name) {
 		var self = this;
-        app.loadPanel(name, this._$two)
+        app.loadPanel(name, this._$two, this)
 			.then(function (panel) {
-				self._panelTwo = panel;
+				self._childTwo = panel;
 				self.update();
 
 				panel.run();
 			}).done();
     };
+
+	SplitView.prototype.splitHorizontalOne = function (value, valueType, dragable, primary) {
+        var splitView = new SplitView(this, this._$one, value, valueType, dragable, primary, SplitView.ORIENTATION_HORIZONTAL);
+
+		this._childOne = splitView;
+		this.update();
+
+		return splitView;
+	};
+
+	SplitView.prototype.splitVerticalOne = function (value, valueType, dragable, primary) {
+        var splitView = new SplitView(this, this._$one, value, valueType, dragable, primary, SplitView.ORIENTATION_VERTICAL);
+
+		this._childOne = splitView;
+		this.update();
+
+		return splitView;
+	};
+
+	SplitView.prototype.splitHorizontalTwo = function (value, valueType, dragable, primary) {
+        var splitView = new SplitView(this, this._$two, value, valueType, dragable, primary, SplitView.ORIENTATION_HORIZONTAL);
+
+		this._childTwo = splitView;
+		this.update();
+
+		return splitView;
+	};
+
+	SplitView.prototype.splitVerticalTwo = function (value, valueType, dragable, primary) {
+        var splitView = new SplitView(this, this._$two, value, valueType, dragable, primary, SplitView.ORIENTATION_VERTICAL);
+
+		this._childTwo = splitView;
+		this.update();
+
+		return splitView;
+	};
 
     SplitView.prototype._resize = function (data) {
 		var result = this._calcResult(data.Width, data.Height);
@@ -84,15 +124,15 @@ define(function () {
 		this._$two[0].style.width = result.Two.Width + 'px';
 		this._$two[0].style.height = result.Two.Height + 'px';
 
-		if (this._panelOne) {
-			this._panelOne.trigger(app.EVENT_PANEL_RESIZE, {
+		if (this._childOne) {
+			this._childOne.event.trigger(app.EVENT_VIEW_RESIZE, {
 				Width: result.One.Width,
 				Height: result.One.Height
 			});
 		}
 
-		if (this._panelTwo) {
-			this._panelTwo.trigger(app.EVENT_PANEL_RESIZE, {
+		if (this._childTwo) {
+			this._childTwo.event.trigger(app.EVENT_VIEW_RESIZE, {
 				Width: result.Two.Width,
 				Height: result.Two.Height
 			});
@@ -169,7 +209,6 @@ define(function () {
 
 		var eventName = 'mousemove.divider' + (Math.ceil(Math.random() * 8999) + 1000);
 
-
 		var dividerOnDrag = this._dividerOnDrag.bind(this);
 		this._$div
 			.addClass('Draggable')
@@ -236,12 +275,12 @@ define(function () {
 	};
 
     var h = function (panel, value, valueType, dragable, primary) {
-        SplitView.prototype.constructor.call(this, panel, value, valueType, dragable, primary, SplitView.ORIENTATION_HORIZONTAL);
+        SplitView.prototype.constructor.call(this, panel, panel.getContainer(), value, valueType, dragable, primary, SplitView.ORIENTATION_HORIZONTAL);
     };
 	h.prototype = new SplitView();
 
     var v = function (panel, value, valueType, dragable, primary) {
-        SplitView.prototype.constructor.call(this, panel, value, valueType, dragable, primary, SplitView.ORIENTATION_VERTICAL);
+        SplitView.prototype.constructor.call(this, panel, panel.getContainer(), value, valueType, dragable, primary, SplitView.ORIENTATION_VERTICAL);
     };
 	v.prototype = new SplitView();
 
