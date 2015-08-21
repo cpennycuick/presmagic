@@ -15,7 +15,7 @@ define(['app/layouts/standard'], function (layoutStandard) {
 
 		var $dialog = $(
 '	<div class="Dialog">'+
-'		<div class="DialogCloseButton"></div>'+
+'		<div class="DialogCloseButton icon icon-cross"></div>'+
 '		<div class="DialogTitle"></div>'+
 '		<div class="DialogContent"></div>'+
 '		<div class="DialogButtons"></div>'+

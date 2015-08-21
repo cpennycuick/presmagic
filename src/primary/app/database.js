@@ -9,7 +9,7 @@ define(function () {
 //	app.db.delete();
 
 	app.db.version(1).stores({
-		presentation: "++ID,&Name",
+		presentation: "++ID,Name",
 		frame: "++ID,PresentationID,Group,Text"
 	});
 

@@ -5,6 +5,7 @@
 	height: 100%;
 	box-sizing: border-box;
 	font-size: 0px;
+	position: relative;
 }
 .Presentation.FramesPanel .Frame {
 	width: 140px;
@@ -52,31 +53,122 @@
 	padding: 0px;
 	margin: 0px;
 }
-.Presentation.ListPanel .AddItem {
-	position: absolute;
-	bottom: 4px;
-	left: 0px;
-	width: 100%;
-	height: 24px;
-	line-height: 22px;
-	cursor: pointer;
-	background-color: #DDD;
-	border: 1px solid #AAA;
-	border-width: 1px 0px;
-	padding: 0px 12px;
-	box-sizing: border-box;
-	font-size: 12px;
-}
-.Presentation.ListPanel .AddItem:hover {
-	background-color: #CCC;
-}
 .Presentation.ListPanel .List li {
 	margin: 0px;
-	padding: 2px 12px;
+	padding: 2px 24px 2px 12px;
 	background-color: #DDD;
 	border-bottom: 1px solid #CCC;
 	cursor: pointer;
+	position: relative;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
 }
 .Presentation.ListPanel .List li:hover {
 	background-color: #FFF;
+}
+.Presentation.ListPanel .List li.Active {
+	background-color: #FFC;
+}
+
+.Presentation.ListPanel .List li .Actions {
+	display: none;
+	position: absolute;
+	top: 4px;
+	right: 0px;
+	font-size: 0;
+}
+.Presentation.ListPanel .List li:hover .Actions {
+	display: block;
+}
+.Presentation.ListPanel .List li .Actions .Action {
+	display: inline-block;
+	margin-right: 4px;
+	width: 18px;
+	height: 18px;
+	line-height: 18px;
+	font-size: 7px;
+	text-align: center;
+	border-radius: 9px;
+	color: #888;
+}
+.Presentation.ListPanel .List li .Actions .Action:hover {
+	background-color: #444;
+	color: #EEE;
+}
+
+.AddItem {
+	position: absolute;
+	bottom: 6px;
+	right: 6px;
+	width: 40px;
+	height: 40px;
+	font-size: 0px;
+	background-color: #444;
+	box-sizing: border-box;
+	border-radius: 20px;
+	box-shadow: 0px 0px 8px -1px #444;
+	white-space: nowrap;
+	overflow: hidden;
+	z-index: 999;
+}
+.AddItem > .AddItemButton {
+	background-color: #444;
+	cursor: pointer;
+	width: 38px;
+	height: 38px;
+	text-align: center;
+	line-height: 39px;
+	font-size: 25px;
+	color: rgba(255, 255, 255, 0.8);
+	border-radius: 19px;
+	border: 1px solid transparent;
+	z-index: 1;
+}
+.AddItem.Open,
+.AddItem:hover {
+	background-color: #A00;
+	box-shadow: 0px 0px 10px -1px #000;
+}
+.AddItem.Open,
+.AddItem:active {
+	box-shadow: 0px 0px 10px -2px #000;
+}
+.AddItem > .AddItemButton:hover {
+	background-color: #F00;
+	border: 1px solid #A00;
+}
+.AddItem.Open > .AddItemButton {
+	background-color: #800;
+	border: 1px solid #700;
+}
+.AddItem.Open {
+	height: auto;
+	background-color: #A00;
+}
+.AddItem > .AddItemOptions {
+	display: none;
+	padding: 4px 5px;
+	width: 38px;
+	height: auto;
+}
+.AddItem.Open > .AddItemOptions {
+	display: block;
+}
+.AddItem > .AddItemOptions > .Option {
+	display: block;
+	width: 26px;
+	height: 26px;
+	background-color: #F00;
+	border-radius: 18px;
+	cursor: pointer;
+	border: 2px solid #A00;
+	font-size: 10px;
+	line-height: 27px;
+	text-align: center;
+	color: white;
+}
+.AddItem > .AddItemOptions > .Option:hover {
+	border: 2px solid #800;
 }

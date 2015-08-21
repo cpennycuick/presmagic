@@ -17,7 +17,7 @@ requirejs.config({
 	}
 });
 
-requirejs(['jQuery', 'Q', 'Dexie', 'app', 'startup', 'style!primary'], function (jquery, Q, Dexie, app, startup) {
+requirejs(['jQuery', 'Q', 'Dexie', 'app', 'startup', 'style!primary', 'style!icons'], function (jquery, Q, Dexie, app, startup) {
 //	window.Dexie = Dexie;
 	window.Q = Q;
 	window.app = app;
@@ -54,6 +54,10 @@ window.requireDeferred = function (deps) {
 		}
 
 		defer.resolve(loadedDeps);
+	});
+
+	defer.promise.catch(function () {
+		console.error('Error!');
 	});
 
 	return defer.promise;

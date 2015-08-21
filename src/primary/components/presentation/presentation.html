@@ -1,14 +1,18 @@
-<div data-template="PresentationFramesPanel" class="Presentation FramesPanel">
-
-</div>
-<div data-template="PresentationFrame" class="Frame"></div>
-
 <div data-template="PresentationListPanel" class="Presentation ListPanel">
 	<ul class="List"></ul>
-	<div class="AddItem">Add Item</div>
 </div>
 <div data-template="PresentationListItem">
 	<ul>
-		<li></li>
+		<li>
+			<span class="Text"></span>
+			<div class="Actions">
+				<div class="Action icon icon-cross" data-action="Delete"></div>
+			</div>
+		</li>
 	</ul>
 </div>
+
+<div data-template="PresentationFramesPanel" class="Presentation FramesPanel">
+	<div class="Frames"></div>
+</div>
+<div data-template="PresentationFrame" class="Frame"></div>

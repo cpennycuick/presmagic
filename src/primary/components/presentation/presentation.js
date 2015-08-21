@@ -10,7 +10,7 @@ define(function () {
 	c.prototype = new parentClass();
 
 	c.prototype.getInfo = function () {
-		return this.buildInfo('0.1', ['Chris; @cpennycuick'],
+		return this.buildInfo('0.2', ['Chris; @cpennycuick'],
 			'This is the presentation component which provides all functionality relating to presentations.'
 		);
 	};

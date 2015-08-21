@@ -8,7 +8,7 @@ define(function () {
 	};
 
 	c.prototype.wrap = function () {
-		this._$container = this._$root;
+		this._$container = this._$root.addClass('Panel');
 	};
 
 	c.prototype.getContainer = function () {
