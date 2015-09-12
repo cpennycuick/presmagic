@@ -29,6 +29,25 @@ define(function () {
 	};
 
 	function addToMainMenu(menu) {
+		
+		menu.add('Output', 80, function () {
+			this.add('Output Controls', function () {
+				this.add('Toggle Output Window', null, function () {
+					var output = chrome.app.window.get("OutputWindowID");
+
+					if(output.visible) {
+						output.hide();
+					}
+					else {
+						output.show();
+					}
+
+					output.visible = !output.visible;
+					
+				});
+			});
+		});
+
 		menu.add('Help', 99, function () {
 			this.add('Help', function () {
 				this.add('Components', null, function () {

@@ -56,7 +56,7 @@ function createOutputWindow(bounds, events) {
 				controll: events.controll
 			};
 		};
-
+		createdWindow.visible = true;
 //		createdWindow.fullscreen();
 		createdWindow.onClosed.addListener(function () {
 			closeRemainingWindows(createdWindow);
