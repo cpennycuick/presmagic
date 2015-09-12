@@ -1,4 +1,8 @@
-define(['app/tool/actionset', 'text!components/presentation/presentation.html'], function (ActionSet, templateHTML) {
+define([
+		'app/tool/actionset',
+		'app/tool/itemselection',
+		'text!components/presentation/presentation.html'
+	], function (ActionSet, ItemSelection, templateHTML) {
 
 	var parentClass = app.Panel;
 	var parent = parentClass.prototype;
@@ -7,7 +11,6 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 	var $oSlide = template.get('PresentationFrame');
 
 	var c = function ($container, options, parentPanel) {
-		this._name = 'FramesPanel';
 		parent.constructor.call(this, $container, {
 			Layout: 'Standard'
 		}, parentPanel);
@@ -29,8 +32,63 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 			})
 			.render(this.$('.FramesPanel'));
 
+		this._selection = ItemSelection.create()
+			.onChange(function (selection) {
+				self.$('.Selected').removeClass('Selected');
+				for (var i in selection) {
+					self.$('[data-index='+selection[i]+']').addClass('Selected');
+				}
+			});
+
 		this._frames = [];
 		this._presentationID = null;
+
+		var keys = [];
+
+		var $frames = this.$('.Frames');
+		var $actions = this.$('.Actions');
+		$('body').on('click.FramesPanel', function (event) {
+			if (!$.contains($frames[0], event.target)
+					&& !$.contains($actions[0], event.target)
+					&& $actions[0] !== event.target
+					&& !self._selection.isSelectionEmpty()) {
+				self._selection.clearSelection();
+			}
+		}).on('keydown.FramesPanel', function (event) {
+			if (!(event.which in keys)) {
+				keys[event.which] = true;
+				if (event.ctrlKey && event.which === 65) { // CTRL + A
+					self._selection.setSelection.apply(self._selection, Object.keys(self._frames));
+				} else if (event.which === 27) { // ESC
+					self._selection.clearSelection();
+				} else if (event.which === 39) { // RIGHT
+					var selection = this._selection.getSingleSelection()
+					if ((selection !== false) && parseInt(selection) < self._frames.length - 1) {
+						selection = parseInt(selection) + 1;
+						self._selection.setSelection(selection);
+					}
+				} else if (event.which === 37) { // LEFT
+					var selection = self._selection.getSingleSelection();
+					if ((selection !== false) && parseInt(selection) > 0) {
+						selection = parseInt(selection) + - 1;
+						self._selection.setSelection(selection);
+					}
+				} else if (event.which === 32 || event.which === 13) { // SPACE | ENTER
+					var selection = self._selection.getSingleSelection();
+					if (selection !== false) {
+						self._toggleActive(selection);
+					}
+				} else {
+					console.log(event);
+				}
+			} else {
+				return false;
+			}
+		}).on('keyup.FramsPanel', function (event) {
+			if (event.which in keys) {
+				delete keys[event.which];
+			}
+		});
 
 		this.getContainer().on('click', '.Frame', function (event) {
 			event.preventDefault;
@@ -38,14 +96,11 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 			var $this = $(this);
 			var index = $this.attr('data-index');
 
-			if ($this.is('.Active')) {
-				self._showText('');
-				self.$('.Active').removeClass('Active');
-			} else {
-				self._showText(self._frames[index].Text);
-				self.$('.Active').removeClass('Active');
-				$this.addClass('Active');
+			if (self._selection.matches(index)) {
+				self._toggleActive(index);
 			}
+
+			self._selection.setSelection(index);
 
 			return;
 		});
@@ -85,6 +140,19 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 		text.send();
 	};
 
+	c.prototype._toggleActive = function (index) {
+		var $this = this.$('[data-index='+index+']');
+
+		if ($this.is('.Active')) {
+			this._showText('');
+			this.$('.Active').removeClass('Active');
+		} else {
+			this._showText(this._frames[index].Text);
+			this.$('.Active').removeClass('Active');
+			$this.addClass('Active');
+		}
+	};
+
 	c.prototype._updateFrames = function () {
 		var $frames = this.$('.Frames');
 		$frames[0].innerHTML = '';
@@ -95,6 +163,8 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 				.text(this._frames[i].Text)
 				.appendTo($frames);
 		}
+
+		this._selection.clearSelection();
 	};
 
 	c.prototype._addNewFrame = function () {

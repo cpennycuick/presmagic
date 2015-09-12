@@ -1,11 +1,30 @@
 .Presentation.FramesPanel {
-	padding: 3px;
 	overflow-x: hidden;
 	overflow-y: scroll;
 	height: 100%;
 	box-sizing: border-box;
 	font-size: 0px;
 	position: relative;
+}
+.Presentation.FramesPanel .Actions {
+	background-color: #E0E0E0;
+	width: 100%;
+	margin-bottom: 6px;
+	border-bottom: 1px solid #CCC;
+}
+.Presentation.FramesPanel .Actions .Action {
+	display: inline-block;
+	font-size: 12px;
+	padding: 4px 8px;
+	height: 17px;
+	line-height: 17px;
+	cursor: pointer;
+}
+.Presentation.FramesPanel .Actions .Action:hover {
+	background-color: #AAA;
+}
+.Presentation.FramesPanel .Frames {
+	padding: 2px;
 }
 .Presentation.FramesPanel .Frame {
 	width: 140px;
@@ -27,23 +46,53 @@
 .Presentation.FramesPanel .Frame:hover {
 	opacity: 0.8;
 }
+.Presentation.FramesPanel .Frame.Selected,
 .Presentation.FramesPanel .Frame.Active {
 	opacity: 1;
-	box-shadow: 0px 0px 6px 0px #444;
+	box-shadow: 0px 0px 6px 3px #000;
 }
-.Presentation.FramesPanel .Frame.Active:before {
+.Presentation.FramesPanel .Frame.Selected:before,
+.Presentation.FramesPanel .Frame.Selected:after,
+.Presentation.FramesPanel .Frame.Active:before,
+.Presentation.FramesPanel .Frame.Active:after {
 	content: "";
 	display: block;
-	width: 6px;
-	height: 6px;
-	border-radius: 6px;
+	width: 100%;
+	height: 100%;
+	border-radius: 3px;
 	position: absolute;
-	top: 3px;
-	right: 3px;
-	background-color: red;
-	border: 1px solid darkred;
+	top: -3px;
+	left: -3px;
+	background-color: transparent;
+	border: 3px solid transparent;
 }
-
+.Presentation.FramesPanel .Frame.Selected:before {
+	border-color: #48F;
+}
+.Presentation.FramesPanel .Frame.Active:after {
+	border-color: #F22;
+}
+.Presentation.FramesPanel .Frame.Selected.Active:after {
+	border-bottom-color: #48F;
+	border-right-color: #48F;
+}
+/*.Presentation.FramesPanel .Frame.Selected:before {
+	border-top-color: #48F;
+	border-left-color: #48F;
+}
+.Presentation.FramesPanel .Frame.Selected:after,
+.Presentation.FramesPanel .Frame.Selected.Active:after {
+	border-bottom-color: #48F;
+	border-right-color: #48F;
+}
+.Presentation.FramesPanel .Frame.Active:before {
+	border-top-color: #F22;
+	border-left-color: #F22;
+}
+.Presentation.FramesPanel .Frame.Active:after {
+	border-bottom-color: #F22;
+	border-right-color: #F22;
+}*/
 .Presentation.ListPanel {
 	position: relative;
 	height: 100%;

@@ -7,7 +7,6 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 	var $oItem = template.get('PresentationListItem').find('li');
 
 	var c = function ($container, options, parentPanel) {
-		this._name = 'ListPanel';
 		parent.constructor.call(this, $container, {
 			Layout: 'Standard'
 		}, parentPanel);

@@ -11,7 +11,6 @@ define(function () {
 			}
 
 			this._events[name].push(fn);
-			console.log('Event bind', name);
 		}, this);
 	};
 
@@ -19,7 +18,6 @@ define(function () {
 		this._makeArray(names).forEach(function (name) {
 			if (name in this._events) {
 				for (var i in this._events[name]) {
-					console.log('Event trigger', name, args);
 					var fnArgs = (args ? $.extend({}, args) : {});
 					this._events[name][i](fnArgs);
 				}

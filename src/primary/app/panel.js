@@ -17,7 +17,6 @@ define(['app/layouts', 'app/mixin/eventmanager'], function (appLayouts, appMixin
 				}
 
 				var container = self.getContainer()[0];
-				console.log('panel resize', data);
 				self.event.trigger(app.EVENT_VIEW_RESIZE, {
 					Width: container.offsetWidth,
 					Height: container.offsetHeight

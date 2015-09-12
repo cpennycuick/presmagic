@@ -4,7 +4,6 @@ define(function () {
 	var parent = parentClass.prototype;
 
 	var c = function ($container, options, parentPanel) {
-		this._name = 'TimeLinePanel';
 		parent.constructor.call(this, $container, {
 			Layout: 'Standard'
 		}, parentPanel);

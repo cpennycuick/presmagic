@@ -45,6 +45,7 @@ define(function () {
 		_loadClasses: function () {
 			var classPaths = [
 				'app/eventmanager',
+				'app/keymanager',
 				'app/mainmenubuilder',
 				'app/component',
 				'app/template',
@@ -58,6 +59,7 @@ define(function () {
 		},
 		_doInit: function () {
 			app.event = new app.EventManager();
+			app.key = new app.KeyManager();
 			app.loader = new app.Loader();
 
 			$(window).resize(function () {
