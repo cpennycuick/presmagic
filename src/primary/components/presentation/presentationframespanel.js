@@ -31,7 +31,7 @@ define([
 				self._addNewFrame();
 			})
 			.render(this.$('.FramesPanel'));
-
+		
 		this._selection = ItemSelection.create()
 			.onChange(function (selection) {
 				self.$('.Selected').removeClass('Selected');
@@ -95,13 +95,16 @@ define([
 
 			var $this = $(this);
 			var index = $this.attr('data-index');
-
-			if (self._selection.matches(index)) {
+			
+			if(event.shiftKey) {
+			    self._selection.toggleSelected(index);
+				return; //no actions except toggle selected with the shift key
+			} 
+			//single frame selected, we can make it active
+			if (self._selection.isSelected(index) && self._selection.isSingleSelection()) {
 				self._toggleActive(index);
 			}
-
-			self._selection.setSelection(index);
-
+			self._selection.setSelection(index);					
 			return;
 		});
 
@@ -114,6 +117,17 @@ define([
 				var index = $(this).attr('data-index');
 				self._removeFrame(index);
 			}
+		});
+		
+		$("#editframe").click(function() {			
+			var frame = self._selection.getSingleSelection();
+			if(!frame) return; //return if no frame is selected, or multiple frames are selected
+			self._setFrameText(frame, "This has been edited");
+		});
+		
+		$("#deleteframe").click(function() {
+			idxs = self._selection.getSelection();
+			self._removeFrames(idxs);
 		});
 
 		app.event.bind(app.EVENT_PRESENTATION_CHANGED, function (data) {
@@ -152,6 +166,7 @@ define([
 			$this.addClass('Active');
 		}
 	};
+	
 
 	c.prototype._updateFrames = function () {
 		var $frames = this.$('.Frames');
@@ -184,20 +199,41 @@ define([
 		});
 	};
 
+	c.prototype._removeFrames = function(indexes) {
+		if(!($.isArray(indexes))) {
+			throw new Error("Expected array, got " + indexes);
+		}
+		//TODO confirm
+		var self = this;
+		//Count backwards so we don't shift array positions. 
+		//This feels like bad practice, since if the indexes aren't in ascending order this will fail
+		for(var i = indexes.length; i > -1; i--) {
+			if (!(indexes[i] in this._frames)) {
+				continue;
+			}
+			var item = this._frames[indexes[i]];
+			app.db.transaction('rw', app.db.frame, function() {
+				app.db.frame.delete(item.ID);
+				self._frames.splice(indexes[i], 1);
+			});			
+		}
+		self._updateFrames();
+	}
+	
 	c.prototype._removeFrame = function (index) {
+		this._removeFrames([index]);
+	};
+	
+	c.prototype._setFrameText = function (index, text) {
 		if (!(index in this._frames)) {
 			return;
 		}
-
-		// TODO confirm
-
 		var self = this;
-		var item = this._frames[index];
-
-		app.db.transaction('rw', app.db.frame, function () {
-			app.db.frame.delete(item.ID);
-
-			self._frames.splice(index, 1);
+		var item = this._frames[index];		
+		app.db.transaction('rw', app.db.frame, function() {
+			app.db.frame.where("ID").equals(item.ID).modify({"Text" : text});
+		}).then(function() {
+			self._frames[index].Text = text;
 			self._updateFrames();
 		});
 	};

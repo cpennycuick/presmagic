@@ -36,7 +36,7 @@ define(function () {
 		if (!(e.which in this._keys)) {
 			this._keys[e.which] = true;
 			var key = Object.keys(this._keys);
-			if (key.join('-'))
+			//if (key.join('-'))
 		} else {
 			return false;
 		}
