@@ -18,6 +18,7 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 		parent._prepare.call(this);
 
 		this._list = [];
+		this._listFilter = "";
 		this._activePresentationID = null;
 
 		template.get('PresentationListPanel')
@@ -32,8 +33,6 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 //				console.log('Item1');
 //			})
 			.render(this.getContainer());
-
-		var self = this;
 
 		this.$('.List').on('click', 'li', function () {
 			var $this = $(this);
@@ -57,14 +56,34 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 			event.preventDefault;
 			var $this = $(this);
 
-			var index = $this.closest('li').attr('data-index');
+			var $selectedLI = $this.closest('li');
+			var index = $selectedLI.attr('data-index');
+			console.log($this.attr('data-action'));
 			switch ($this.attr('data-action')) {
 				case 'Delete':
 					self._removeItem(index);
 					break;
+				case 'Edit':
+					self._editItem($selectedLI, index);
+					break;
+				default:
+					break;					
 			}
 
 			return false;
+		});
+		
+		$('#list-search-box').bind('keyup', function(event) {
+			if(self._updateFilter($(this).val())) {
+				console.log("Updated");	
+				$(this).css("background-color", "#CCFF99");
+			} else {
+				$(this).css("background-color", "#FF7376");
+			}
+		}).blur(function() {
+			if($(this).val().length == 0) {
+				$(this).css("background-color", "#FFFFFF");
+			}
 		});
 
 
@@ -87,6 +106,31 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 			$item.find('.Text')
 				.text(this._list[i].Name);
 		}
+	};
+	
+	c.prototype._updateFilter = function(filterText) {
+		filterText = filterText.toLowerCase();
+		this._listFilter = filterText;
+		
+		var rez = false; //return value, true only if there is at least one item left in the list
+		
+		for(var i = 0; i < this._list.length; i++) {
+			if((filterText.length == 0) || (this._list[i].Name.toLowerCase().indexOf(filterText) != -1)) {
+				$("li")
+			    .filter( function(){
+			            return ($(this).attr('data-index') == i);
+			        })
+			    .removeClass("Hidden");
+				rez = true;
+			} else {
+				$("li")
+			    .filter( function(){ 
+			            return ($(this).attr('data-index') == i);
+			        })
+			    .addClass("Hidden");
+			}
+		}
+		return rez;
 	};
 
 	c.prototype._addNewItem = function () {
@@ -127,6 +171,43 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 
 			this._activePresentationID = null;
 		}
+	};
+	
+	c.prototype._editItem = function ($listelement, index) {
+		
+		var self = this;
+		var oldtext = $listelement.find(".Text").addClass("Hidden").text();
+		
+		$listelement.addClass("Edit");
+		$listelement.find("input")
+					.addClass("EditActive")
+					.removeClass("Hidden")
+					.val(oldtext)
+					.focus()
+					.bind('blur keyup', function(event) {
+						if(event.type == 'blur' || event.keyCode == '13') { //Focus lost or enter pressed
+							var $this = $(this);
+							var itemID = self._list[index].ID;;
+							var newtext = $this.val();
+							//Swap css style elements back to hide the textbox and show the name
+							$this.removeClass("EditActive").addClass("Hidden");
+							$this.siblings(".Text").removeClass("Hidden")
+							$this.parent("li").removeClass("Edit");
+							$this.off(); //remove this event handler
+							if(newtext.length == 0) return; //We don't want to have no name 
+							//Database transaction
+							//Would love some functions for the database so I can just do app.db.updateTitle(SONGID, TITLE)
+							app.db.transaction('rw', [app.db.presentation], function () {
+								app.db.presentation.where('ID').equals(itemID).modify({"Name" : newtext});
+							}).then(function() {
+								$this.siblings(".Text").text(newtext); //change the text only if the database is also changed
+								self._list[index].Name = newtext;
+							}).catch(function(error) {
+								console.log("Failed to edit song name");
+								console.log(error);
+							});							
+						}						
+					})
 	};
 
 	return c;

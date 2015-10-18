@@ -1,11 +1,18 @@
 <div data-template="PresentationListPanel" class="Presentation ListPanel">
+    <div>
+    	<input type="Text" id="list-search-box" class="Presentation SearchBox" placeholder="Search"></input>
+    	<span class="icon icon-search"></span>
+    </div>
+    
 	<ul class="List"></ul>
 </div>
 <div data-template="PresentationListItem">
 	<ul>
 		<li>
 			<span class="Text"></span>
+			<input type="text" class="Hidden"></input>
 			<div class="Actions">
+				<div class="Action icon icon-pencil" data-action="Edit"></div>
 				<div class="Action icon icon-cross" data-action="Delete"></div>
 			</div>
 		</li>
@@ -14,10 +21,10 @@
 
 <div data-template="PresentationFramesPanel" class="Presentation FramesPanel">
 	<div class="Actions">
-		<div class="Action">
+		<div class="Action" id="editframe">
 			<span class="icon icon-pencil"></span> Edit
 		</div>
-		<div class="Action">
+		<div class="Action" id="deleteframe">
 			<span class="icon icon-cross"></span> Delete
 		</div>
 	</div>

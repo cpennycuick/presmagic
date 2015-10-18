@@ -18,10 +18,9 @@ define(function () {
 	};
 
 	app.ItemSelection.prototype.getSingleSelection = function () {
-		if (this.isSelectionSingle()) {
+		if (this.isSingleSelection()) {
 			return this._selection[0];
 		}
-
 		return false;
 	};
 
@@ -52,6 +51,14 @@ define(function () {
 			this._triggerChange();
 		}
 	};
+	
+	app.ItemSelection.prototype.toggleSelected = function (index) {
+		if(this.isSelected(index)) {
+			this.removeFromSelection(index);
+		} else {
+			this.addToSelection(index);
+		}
+	}
 
 	app.ItemSelection.prototype.isSelected = function (single) {
 		return (this._selection.indexOf(single) >= 0);
