@@ -192,7 +192,6 @@ define([
 			var item = {PresentationID: self._presentationID, Text: 'New'};
 			app.db.frame.add(item).then(function (ID) {
 				item.ID = ID;
-
 				self._frames.push(item);
 				self._updateFrames();
 			});
@@ -207,6 +206,7 @@ define([
 		var self = this;
 		//Count backwards so we don't shift array positions. 
 		//This feels like bad practice, since if the indexes aren't in ascending order this will fail
+		indexes = indexes.sort(); //is the assignment needed or is this an object?
 		for(var i = indexes.length; i > -1; i--) {
 			if (!(indexes[i] in this._frames)) {
 				continue;

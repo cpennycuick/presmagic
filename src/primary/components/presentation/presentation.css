@@ -93,6 +93,16 @@
 	border-bottom-color: #F22;
 	border-right-color: #F22;
 }*/
+.Presentation.SearchBox {
+	width: 260px;
+	height: 20px;
+    margin-left: 5px;    
+    margin-top: 5px;
+    margin-bottom: 4px;
+    border:none;
+    outline:none
+}
+
 .Presentation.ListPanel {
 	position: relative;
 	height: 100%;
@@ -112,13 +122,38 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-
 }
+
+.Presentation.ListPanel .List li.Edit, 
+.Presentation.ListPanel .List li.Edit:hover {
+	margin: 0px;
+	padding: 1px 0px 1px 12px;
+	background-color: #CCFF99;
+	border-bottom: 1px solid #CCC;
+	cursor: pointer;
+	position: relative;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .Presentation.ListPanel .List li:hover {
 	background-color: #FFF;
 }
 .Presentation.ListPanel .List li.Active {
 	background-color: #FFC;
+}
+
+.Presentation.ListPanel .List .Hidden {
+	display: none;
+}
+
+.Presentation.ListPanel .List .EditActive {
+	background-color: #CCFF99;
+	font-family: 'Segoe UI', Tahoma, sans-serif;
+	font-size:initial;
+	border:none;
+	outline:none;	
 }
 
 .Presentation.ListPanel .List li .Actions {
