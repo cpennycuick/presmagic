@@ -3,14 +3,16 @@ define(function () {
 	var parentClass = app.Component;
 	var parent = parentClass.prototype;
 
-	var c = function () {
-		parent.constructor.call(this, 'Test');
+	var c = function TestComponent () {
+		parent.constructor.call(this, 'Test', ['Core']);
 	};
 
 	c.prototype = new parentClass();
 
-	c.prototype.getInfo = function () {
-		return this.buildInfo('0.0.1', ['Chris; @cpennycuick'],
+	c.prototype._defineInfo = function () {
+		return this._buildInfo(
+			'0.0.1',
+			['Chris; @cpennycuick'],
 			'This is a test component running along side the core component.'
 		);
 	};

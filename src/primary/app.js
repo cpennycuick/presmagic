@@ -46,6 +46,7 @@ define(function () {
 			var classPaths = [
 				'app/eventmanager',
 				'app/keymanager',
+				'app/componentmanager',
 				'app/mainmenubuilder',
 				'app/component',
 				'app/template',
@@ -58,9 +59,11 @@ define(function () {
 			return requireDeferred(classPaths);
 		},
 		_doInit: function () {
+			app.loader = new app.Loader();
+
 			app.event = new app.EventManager();
 			app.key = new app.KeyManager();
-			app.loader = new app.Loader();
+			app.components = new app.ComponentManager();
 
 			$(window).resize(function () {
 				app.event.trigger(app.EVENT_WINDOW_CHANGE);
