@@ -14,6 +14,8 @@ define([
 		parent.constructor.call(this, $container, {
 			Layout: 'Standard'
 		}, parentPanel);
+
+		this._activeFrame = null;
 	};
 
 	c.prototype = new parentClass();
@@ -24,7 +26,6 @@ define([
 
 		template.get('PresentationFramesPanel')
 			.appendTo(this.getContainer());
-
 
 		ActionSet.create()
 			.addAction('plus', function () {
@@ -108,20 +109,13 @@ define([
 			return;
 		});
 
-		this.getContainer().on('contextmenu', '.Frame', function (event) {
-			if (event.which === 3) {
-				event.preventDefault();
-				// this method is temporary
-				// TODO find another method - context menu?
-
-				var index = $(this).attr('data-index');
-				self._removeFrame(index);
-			}
-		});
-
 		$("#editframe").click(function() {
 			var frame = self._selection.getSingleSelection();
-			if(!frame) return; //return if no frame is selected, or multiple frames are selected
+
+			if (!frame) {
+				return; // Return if no frame is selected, or multiple frames are selected
+			}
+
 			self._setFrameText(frame, "This has been edited");
 		});
 
@@ -144,6 +138,7 @@ define([
 				self._updateFrames();
 			}
 
+			self._selection.clearSelection();
 			self._presentationID = data.PresentationID;
 		});
 	};
@@ -157,29 +152,39 @@ define([
 	c.prototype._toggleActive = function (index) {
 		var $this = this.$('[data-index='+index+']');
 
-		if ($this.is('.Active')) {
+		var selectedActiveFrame = this._getActiveFrameKey(this._presentationID, index);
+
+		if (this._activeFrame === selectedActiveFrame) {
 			this._showText('');
 			this.$('.Active').removeClass('Active');
+			this._activeFrame = null;
 		} else {
 			this._showText(this._frames[index].Text);
 			this.$('.Active').removeClass('Active');
 			$this.addClass('Active');
+			this._activeFrame = selectedActiveFrame;
 		}
 	};
 
+	c.prototype._getActiveFrameKey = function (presentationID, index) {
+		return presentationID+':'+index;
+	};
 
 	c.prototype._updateFrames = function () {
 		var $frames = this.$('.Frames');
 		$frames[0].innerHTML = '';
 
-		for (var i = 0; i < this._frames.length; i++) {
+		for (var index = 0; index < this._frames.length; index++) {
+			var isActive = (this._activeFrame === this._getActiveFrameKey(this._presentationID, index));
+
 			$oSlide.clone()
-				.attr('data-index', i)
-				.text(this._frames[i].Text)
+				.attr('data-index', index)
+				.text(this._frames[index].Text)
+				.toggleClass('Active', isActive)
 				.appendTo($frames);
 		}
 
-		this._selection.clearSelection();
+		this._selection.triggerChange();
 	};
 
 	c.prototype._addNewFrame = function () {
