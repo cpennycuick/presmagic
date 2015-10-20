@@ -10,10 +10,7 @@ define(function () {
 				.then(app.components.Q('start'))
 				.then(app.start)
 				.then(onLoadComplete)
-				.then(removeSplashLoader)
-				.then(function () {
-					console.log('Startup done()');
-				});
+				.then(removeSplashLoader);
 		}).done();
 	};
 
@@ -29,30 +26,26 @@ define(function () {
 
 	function initSplashLoader() {
 		var appLoadComplete = app.loader.add();
-		app.event.bind(app.EVENT_APPLICATION_START, function () {
-			appLoadComplete();
-			appLoadComplete = null;
-		});
+		app.event.bind(app.EVENT_APPLICATION_START, appLoadComplete);
 
 		var $progressProgress = $('#SplashScreen .LoadingProgress');
 		app.loader.onUpdate(function (progress, total) {
 			$progressProgress.width((total ? Math.floor(progress / total * 100) : 100)+'%');
 		});
 
-		app.loader.startSimulateProgress();
+		app.loader.start();
 	}
 
 	function onLoadComplete() {
 		var defer = Q.defer();
 
 		defer.promise
-			.timeout(1000 * 30)
+			.timeout(1000 * 30) // 30s
 			.fail(function (err) {
 				console.log('Failed to finish loading.');
 				clearInterval(interval);
 				defer.resolve();
-			})
-			.done();
+			});
 
 		var interval = setInterval(function () {
 			if (app.loader.isComplete()) {

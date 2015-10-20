@@ -6,6 +6,7 @@ define(function () {
 
 		this._updateFns = [];
 		this._destroyed = false;
+		this._started = false;
 	};
 
 	app.Loader.prototype.isComplete = function () {
@@ -29,12 +30,21 @@ define(function () {
 		})(this._incrementProgress.bind(this), inc);
 	};
 
-	app.Loader.prototype.startSimulateProgress = function () {
-		setTimeout(
-			this._simulateProgress.bind(this),
-			500 + Math.floor(Math.random() * 1500)
+	app.Loader.prototype.start = function () {
+		if (this._started) {
+			return;
+		}
+
+		this._queueSimulateProgress();
+
+		this._started = true;
+	};
+
+	app.Loader.prototype._queueSimulateProgress = function () {
+		setTimeout(this._simulateProgress.bind(this),
+			100 + Math.floor(Math.random() * 5000)
 		);
-	}
+	};
 
 	app.Loader.prototype._simulateProgress = function () {
 		if (this._destroyed) {
@@ -48,6 +58,8 @@ define(function () {
 		this._progress += 1;
 		this._total += 1;
 		this._update();
+
+		this._queueSimulateProgress();
 	};
 
 	app.Loader.prototype.onUpdate = function (fn) {

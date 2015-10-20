@@ -5,6 +5,13 @@ define(['text!components.json', 'app/mixin/qmethods'], function (componentsJSON,
 		this._componentGraphRoots = [];
 		this._componentDependencyOrder = [];
 
+		this.STATE_READY = 'Ready';
+		this.STATE_INITIALSED = 'Initialsed';
+		this.STATE_REGISTERED = 'Registered';
+		this.STATE_STARTED = 'Started';
+
+		this._state = this.STATE_READY;
+
 		this._registerCompleteFn = null;
 		this._loadCompleteFn = null;
 
@@ -12,9 +19,12 @@ define(['text!components.json', 'app/mixin/qmethods'], function (componentsJSON,
 	};
 
 	app.ComponentManager.prototype.init = function () {
+		this._checkState(this.STATE_READY);
+
 		return Q()
 			.then(this._getClasses.bind(this))
 			.then(this._buildDependencyGraph.bind(this))
+			.then(this._updateState.bind(this, this.STATE_INITIALSED));
 	};
 
 	app.ComponentManager.prototype._getClasses = function () {
@@ -76,39 +86,50 @@ define(['text!components.json', 'app/mixin/qmethods'], function (componentsJSON,
 	};
 
 	app.ComponentManager.prototype.register = function () {
-		var promises = [];
+		this._checkState(this.STATE_INITIALSED);
 
-		this._componentDependencyOrder.forEach(function (component) {
-			var promise = Q(component.register())
-				.then(this._registerCompleteFn)
-				.then(function() {
-					console.log('Component', component._name, 'register()');
-				});
+		var promises = this._callComponentsMethod('register', this._registerCompleteFn);
 
-			promise.done();
-
-			promises.push(promise);
-		}, this);
-
-		return Q.allSettled(promises);
+		return Q.allSettled(promises)
+			.then(this._updateState.bind(this, this.STATE_REGISTERED));
 	};
 
 	app.ComponentManager.prototype.start = function () {
+		this._checkState(this.STATE_REGISTERED);
+
+		var promises = this._callComponentsMethod('load', this._loadCompleteFn);
+
+		return Q.allSettled(promises)
+			.then(this._updateState.bind(this, this.STATE_STARTED));
+	};
+
+	app.ComponentManager.prototype._callComponentsMethod = function (methodName, completeFn) {
 		var promises = [];
 
 		this._componentDependencyOrder.forEach(function (component) {
-			var promise = Q(component.load())
-				.then(this._loadCompleteFn)
-				.then(function() {
-					console.log('Component', component._name, 'load()');
-				});
+			var promise = Q(component[methodName]())
+				.then(completeFn);
 
 			promise.done();
 
 			promises.push(promise);
 		}, this);
 
-		return Q.allSettled(promises);
+		return promises;
+	};
+
+	app.ComponentManager.prototype._checkState = function (state) {
+		if (this._state !== state) {
+			throw new Error('Invalid state: '+this._state+'; Expected: '+state);
+		}
+	};
+
+	app.ComponentManager.prototype._updateState = function (state) {
+		this._state = state;
+	};
+
+	app.ComponentManager.prototype.getAll = function () {
+		return this._componentDependencyOrder;
 	};
 
 	return app.ComponentManager;

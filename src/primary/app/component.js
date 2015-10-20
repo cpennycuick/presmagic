@@ -11,14 +11,13 @@ define(function () {
 		this._info = this._defineInfo();
 	};
 
-	app.Component.prototype._buildInfo = function (version, contributers, description) {
+	app.Component.prototype._buildInfo = function (version, description) {
 		var versionParts = (version || '0.0.1').split('.');
 		versionParts = versionParts.concat(['0', '0', '0'].slice(versionParts.length, 3));
 
 		return {
 			Name: this._name,
 			Version: versionParts.join('.'),
-			Contributers: contributers || [],
 			Description: description || null,
 			Dependencies: this._dependencies
 		};
