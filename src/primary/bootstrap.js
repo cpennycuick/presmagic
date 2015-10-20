@@ -6,6 +6,7 @@ requirejs.config({
 
 		'DI': '/src/displayinstructions',
 
+		'Handlebars': '/vendor/handlebars/handlebars-4.0.2',
 		'Dexie': '/vendor/dexie/dexie-1.0.4.min',
 		'jQuery': '/vendor/jquery/jquery-2.1.3.min',
 		'Q': '/vendor/q/q-1.4.1'
@@ -13,11 +14,14 @@ requirejs.config({
 	shim: {
 		'Dexie': {
 			exports: 'Dexie'
+		},
+		'Handlebars': {
+			exports: 'Handlebars'
 		}
 	}
 });
 
-requirejs(['jQuery', 'Q', 'Dexie', 'app', 'startup', 'style!primary', 'style!icons'], function (jquery, Q, Dexie, app, startup) {
+requirejs(['jQuery', 'Q', 'Dexie', 'Handlebars', 'app', 'startup', 'style!primary', 'style!icons'], function (jquery, Q, Dexie, Handlebars, app, startup) {
 //	window.Dexie = Dexie;
 	window.Q = Q;
 	window.app = app;
