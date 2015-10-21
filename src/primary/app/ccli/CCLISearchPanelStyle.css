@@ -1,0 +1,142 @@
+.CCLISearchBox {
+	min-width:500px;
+	height:20px;
+	font-family: 'Segoe UI', Tahoma, sans-serif;
+	font-size:initial;
+	border:none;
+	outline:none;
+	
+}
+.Dialog {
+	max-height:600px;
+	max-width:550px;
+}
+.Dialog .DialogContent {
+	max-height: 580px
+	max-width:545px;
+}
+
+.BlackHR {
+	border-width: 2px;
+    border-color:black;
+}
+
+.CCLISearchIcon {
+	font-size:20px;
+	border-radius:10px;
+	border: 4px solid white;
+	background-color:white;
+}
+
+.CCLISearchIcon:hover {
+	background-color: #32D2FF;
+    border-color: #32D2FF;
+}
+
+.CCLISearchIcon:active {
+	background-color: #00A4D2;
+    border-color: #00A4D2;
+}
+
+.SpinnerDiv {
+	
+	min-width:100%;
+	min-height:450px;
+	position:relative;
+}
+
+.CCLIList {
+    list-style-type: none;
+    padding:5px;
+}
+
+.CCLIListResult {    
+   
+    border-left: 4px solid;
+    border-color: #000066;
+    color: #000066;
+    border-radius:5px;
+    padding: 5px 10px 5px 15px;
+    margin:3px;
+    background-color:#E9E9E9;
+    font-size:20px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-weight:400;
+}
+
+.CCLIListResult .Authors {
+    font-size:14px;    
+    padding:2px 0px 4px 0px;
+    color:black;
+    font-weight:normal;
+}
+
+.CCLIListResult .Catalogs {
+    font-style:italic;
+    font-size:12px;
+    color:black;
+    font-weight:normal;
+}
+
+.CCLIListResult .ActionIcon, 
+.LyricViewDiv .ActionIcon {
+	color:black;
+	padding: 0px 5px 5px 5px;
+    border-radius: 20px;
+    border-width: 3px;
+}
+
+.LyricViewDiv .ActionIcon {
+	font-size: 30px;
+    padding: 20px;
+    margin-right: 10px;
+    color: #2A9A23;
+}
+
+.LyricViewDiv .ActionIcon:hover {
+	background-color: lightgrey;
+}
+
+.CCLIListResult .ActionIcon:hover {
+	color:white;
+}
+
+.CCLIListResult:hover {
+    background-color:grey;
+}
+.CCLISearchSummary {
+  overflow:hidden;
+    
+}
+
+.CCLIListContainer {
+  max-height: 450px;
+  overflow:auto;
+}
+
+.LyricViewDiv {
+	overflow:auto;
+	max-height:400px;
+}
+
+.LyricViewSongTitle {
+	font-family: 'Segoe UI', Tahoma, sans-serif;
+	font-size:20px;
+}
+
+.LyricViewSongContent {
+	font-size:14px;
+}
+
+.ErrorDiv {
+	padding: 0px 0px 0px 10px;
+	font-size:14px;
+	border-radius:10px;
+}
+
+.ErrorIcon {
+	color:#FF7676;
+	padding: 50px;
+	font-size:120px;
+	text-align:center;
+}

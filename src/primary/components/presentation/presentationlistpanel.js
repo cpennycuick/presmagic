@@ -28,10 +28,10 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 		ActionSet.create()
 			.addAction('plus', function () {
 				self._addNewItem();
-			})
-//			.addAction('search', function () {
-//				console.log('Item1');
-//			})
+			}, "New")
+			.addAction('folder-download', function () {
+				self._launchSongSelectSearch();
+			}, "SongSelect")
 			.render(this.getContainer());
 
 		this.$('.List').on('click', 'li', function () {
@@ -75,7 +75,6 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 		
 		$('#list-search-box').bind('keyup', function(event) {
 			if(self._updateFilter($(this).val())) {
-				console.log("Updated");	
 				$(this).css("background-color", "#CCFF99");
 			} else {
 				$(this).css("background-color", "#FF7376");
@@ -85,13 +84,14 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 				$(this).css("background-color", "#FFFFFF");
 			}
 		});
-
+		
 
 		var self = this;
 		app.db.presentation.toArray(function (list) {
 			self._list = list;
 			self._updateList();
 		});
+
 	};
 
 	c.prototype._updateList = function () {
@@ -209,6 +209,15 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 						}						
 					})
 	};
+	
+	c.prototype._launchSongSelectSearch = function() {
+		var self = this;
+		app.loadPanel('app/ccli/songselectui', $('#Content'))
+		.then(function (panel) {
+			panel._itemListReference = self;
+			panel.run();
+		}).done();
+	}
 
 	return c;
 });

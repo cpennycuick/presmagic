@@ -45,8 +45,16 @@ define(function () {
 			return getAttributeByKey("Fields", "/t");
 		}
 		
-		this.getVerses = function() {
-			return getAttributeByKey("Verses", "/t");
+		//returns a hashmap key = fieldName, data = [] of word lines
+		this.getWords = function() {
+			var fields = this.getFields();
+			var fieldContents = getAttributeByKey("Words", "/t");
+			var result = [];
+			console.log(fields.length + ", " + fieldContents.length)
+			for(var i = 0; i < fields.length; i++) {
+				result[fields[i]] = fieldContents[i].split("/n");
+			}
+			return result;
 		}
 		
 		this.getCCLINumber = function() {
@@ -71,7 +79,7 @@ define(function () {
 	};
 	
 	//returns a CCLISong object parsed from the given string
-	app.CCLIConverter.getSong = function(filetext) {
+	getCCLISong = function(filetext) {
 		if(filetext === "") return false;
 		
 		var keyRegexp = /([A-Za-z]+)=(.*)/,

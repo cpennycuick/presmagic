@@ -10,7 +10,10 @@
 	"permissions": [
 		"system.display",
 		"unlimitedStorage",
-		"storage"
+		"storage",
+		"http://*/",
+		"https://*/"
+		
 	],
 	"offline_enabled": true,
 	"manifest_version": 2

@@ -46,6 +46,7 @@ define([
 		var keys = [];
 
 		var $frames = this.$('.Frames');
+		
 		var $actions = this.$('.Actions');
 		$('body').on('click.FramesPanel', function (event) {
 			if (!$.contains($frames[0], event.target)
@@ -59,6 +60,16 @@ define([
 				keys[event.which] = true;
 				if (event.ctrlKey && event.which === 65) { // CTRL + A
 					self._selection.setSelection.apply(self._selection, Object.keys(self._frames));
+/*					songSelectLogout().then(function() {
+						songSelectLogin("info@rcbc.org.au", "rcbcmedia").then(function(loginResult) {
+							console.log("Successfully logged in as: " + loginResult);
+						}, function(error){
+							console.log("Failed login! " + error);
+						});
+					}); //testing
+
+*/
+
 				} else if (event.which === 27) { // ESC
 					self._selection.clearSelection();
 				} else if (event.which === 39) { // RIGHT
@@ -196,6 +207,7 @@ define([
 				self._updateFrames();
 			});
 		});
+		
 	};
 
 	c.prototype._removeFrames = function(indexes) {

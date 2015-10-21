@@ -56,8 +56,8 @@ define(function () {
 		$('body').unbind('click.ActionSet'+this._ID);
 	};
 
-	app.ActionSet.prototype.addAction = function (icon, fn) {
-		this._actions.push([icon, fn]);
+	app.ActionSet.prototype.addAction = function (icon, fn, text) {
+		this._actions.push([icon, fn, text]);
 		return this;
 	};
 
@@ -69,10 +69,14 @@ define(function () {
 		var $actionOptions = this._$actionSet.find('.AddItemOptions');
 
 		for (var i = 0; i < this._actions.length; i++) {
+			var text = this._actions[i][2];
+			if(text == undefined) {
+				text = "";
+			}
 			var $action = $('<div class="Option"></div>')
 				.addClass('icon icon-'+this._actions[i][0])
 				.attr('data-index', i);
-
+			tipped.create($action, text, { position: 'left' });
 			$actionOptions.append($action);
 		}
 
