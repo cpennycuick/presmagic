@@ -25,10 +25,10 @@ define(function () {
 		setup.start();
 	};
 
-	app.loadPanel = function (name, $container, parent) {
+	app.loadPanel = function (name, $container, parent, options) {
 		return requireOneDeferred(name)
 			.then(function (panelClass) {
-				return new panelClass($container, {}, parent);
+				return new panelClass($container, options || {}, parent);
 			});
 	};
 
@@ -88,6 +88,18 @@ define(function () {
 
 			$('#MainMenu').append(this._mainmenu.render());
 		}
+	};
+	
+	app.promptPanel = function (name, $container, parent, options) {	
+		var deferred = Q.defer();
+		options["Promise"] = options["Promise"] || deferred;
+		app.loadPanel('app/panels/BasicInputDialog', $('#Content'), parent, options)
+		.then(function (panel) {
+			panel.deferredPromise = deferred;
+			panel.run();
+			//deferred.resolve("");
+		}).done();
+		return deferred.promise;
 	};
 
 	return app;
