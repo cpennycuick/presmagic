@@ -117,7 +117,6 @@ table, td, div, span, p { padding: 0px; margin: 0px; }
 .Dialog .DialogContent {
 	background-color: #FFF;
 	padding: 6px;
-	min-height: 128px;
 }
 
 .Dialog .DialogButtons {

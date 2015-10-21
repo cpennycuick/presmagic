@@ -23,13 +23,21 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 
 	c.prototype._prepare = function () {
 		parent._prepare.call(this);
-		songSelectLogout();
+		//songSelectLogout(); used for testing since login is persistent
 		template.get('CCLISearchPanel')
 			.appendTo(this.getContainer());
 		
 		var self = this;
 		var $button = self.$('#ccli-search-button');
-		$button.click(this._songSelectSearch.bind(this))		
+		$button.click(this._songSelectSearch.bind(this));
+		
+		self.$('#ccli-search-box').bind('keyup', function(event) {
+		    if(event.keyCode == 13) { //enter
+			self._songSelectSearch();
+		    }
+		});
+		
+		this._setLoadState('loading');
 		
 	};
 	
@@ -41,7 +49,7 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 	    switch(loadState) {
 	    	case 'loading':	    	    
 	    	    $loading = $(
-	    		"<div class='Loading'><img src='/resources/712.gif'></img></div>"
+	    		"<div class='Loading'><img class='LoadingImg' src='/resources/712.gif'></img></div>"
 	    	    );
 	    	    $listDiv.append($loading);
 	    	    console.log("Set loading state")
@@ -91,7 +99,7 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 	c.prototype._songSelectLogin = function() {
 	    	var self = this;
 		var opts = {
-			title: 'Log in to SongSelect', 
+			Title: 'Log in to SongSelect', 
 			Inputs:[
 			        {
 			            Name: 'Username', 
@@ -109,7 +117,7 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 				 }
 			}
 		
-		app.promptPanel('', $('#Content'), this, opts).then(
+		app.promptPanel(this, opts).then(
 			function(result) {		
 				songSelectLogin(result['Username'], result['Password']).then(
 					function() {
@@ -182,6 +190,7 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 				}
 
 		});
+		$list.show();
 	};
 	
 	c.prototype._clearList = function() {
@@ -190,11 +199,31 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 				.removeClass()
 				.append("<ul class=\"CCLIList\"></ul>")
 				.addClass("CCLIListContainer");
+		this.$(".CCLIList").hide();
+		
 	}
 	
 	
 	c.prototype._previewSong = function(songsearchdata) {
-		app.loadPanel('app/ccli/LyricViewer', $('#Content'))
+	    var self = this;
+	    var opts = {
+		    title: 'Preview',
+		    buttons : [{
+			text: 'Import',
+			action: function() {
+			   var opts =  {
+				Title : 'Confirm import',
+				Text : 'Import ' + songsearchdata.getName() + "?"
+			    }
+			    app.promptPanel(this, opts).then(function(resolved) {
+				self._importSong(songsearchdata);
+			    });
+			    
+			    
+			}
+		    }]
+	    	}
+		app.loadPanel('app/ccli/LyricViewer', $('#Content'), '', opts)
 		.then(function (panel) {
 			panel.searchdata = songsearchdata;
 			panel.run();

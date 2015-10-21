@@ -6,6 +6,10 @@ define(['app/layouts/standard'], function (layoutStandard) {
 		layoutStandard.prototype.constructor.call(this, $body, options);
 		this._$cloak = $();
 		this._$buttons = $();
+		this._options = options;
+		for(var key in options) {
+		    console.log(key + ": " + options[key]);
+		}
 	};
 	c.prototype = new layoutStandard();
 

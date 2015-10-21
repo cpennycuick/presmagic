@@ -9,12 +9,14 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 
 	var template = new app.Template(templateHTML);
 	
-	var c = function ($container) {
+	var c = function ($container, options) {
+	    for(var i = 0; i < arguments.length; i++){
+		console.log(arguments[i]);
+	    }
+
 		parent.constructor.call(this, $container, {
 			Layout: 'Dialog',
-			LayoutOptions: {
-				title: 'Preview',
-			}
+			LayoutOptions: options
 		});
 	};
 

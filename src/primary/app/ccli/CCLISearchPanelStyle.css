@@ -78,23 +78,11 @@
     font-weight:normal;
 }
 
-.CCLIListResult .ActionIcon, 
-.LyricViewDiv .ActionIcon {
+.CCLIListResult .ActionIcon {
 	color:black;
 	padding: 0px 5px 5px 5px;
     border-radius: 20px;
     border-width: 3px;
-}
-
-.LyricViewDiv .ActionIcon {
-	font-size: 30px;
-    padding: 20px;
-    margin-right: 10px;
-    color: #2A9A23;
-}
-
-.LyricViewDiv .ActionIcon:hover {
-	background-color: lightgrey;
 }
 
 .CCLIListResult .ActionIcon:hover {
@@ -139,4 +127,18 @@
 	padding: 50px;
 	font-size:120px;
 	text-align:center;
+}
+
+.Loading {
+	position:relative;
+	min-height:300px;
+}
+
+.LoadingImg {
+	position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;	
 }

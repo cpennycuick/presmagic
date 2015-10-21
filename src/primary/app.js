@@ -90,7 +90,7 @@ define(function () {
 		}
 	};
 	
-	app.promptPanel = function (name, $container, parent, options) {	
+	app.promptPanel = function (parent, options) {	
 		var deferred = Q.defer();
 		options["Promise"] = options["Promise"] || deferred;
 		app.loadPanel('app/panels/BasicInputDialog', $('#Content'), parent, options)
