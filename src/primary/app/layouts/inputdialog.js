@@ -20,6 +20,7 @@ define(['app/layouts/standard', 'style!app/layouts/InputDialog.css'], function (
 				'	<div class="Dialog">'+
 				'		<div class="DialogCloseButton icon icon-cross"></div>'+
 				'		<div class="DialogTitle"></div>' +
+				'		<div class="DialogContent"></div>' +
 				'		<div class="DialogInputs"></div>'+
 				'		<div class="DialogButtons"></div>' +
 				'	</div>'
@@ -28,10 +29,13 @@ define(['app/layouts/standard', 'style!app/layouts/InputDialog.css'], function (
 		this._$container = $dialog.find('.DialogContent');
 		this._$inputs = $dialog.find('.DialogInputs');
 		this._$buttons = $dialog.find('.DialogButtons');
-		$dialog.find('.DialogCloseButton').click(this.close.bind(this));
-		$dialog.find('.DialogTitle').text(this._options.title);
 		
-		this._inputs = this._options["Inputs"];
+		$dialog.find('.DialogCloseButton').click(this.close.bind(this));
+		$dialog.find('.DialogTitle').text(this._options.Title || "Input");
+		$dialog.find('.DialogContent').text(this._options.Text || '');
+		
+		
+		this._inputs = this._options["Inputs"] || {};
 		for(var i = 0; i < this._inputs.length; i++) {
 			this.addInput(this._inputs[i].Name || "", this._inputs[i].Type || "text", this._inputs[i].Compulsory || true, i);
 			this._inputs[i].index = i;
@@ -59,8 +63,8 @@ define(['app/layouts/standard', 'style!app/layouts/InputDialog.css'], function (
 	//Adds two buttons : confirms and cancel. Confirm button checks that compulsory fields are filled then returns a fulfilled promise
 	c.prototype.addButtons = function(buttonOptions) {
 	    var self = this;
-	    var $cancelButton = $('<button class="InputDialogCancel"></button>');
-	    var $confirmButton = $('<button class="InputDialogConfirm"></button>');
+	    var $cancelButton = $('<button class="dialog"></button>');
+	    var $confirmButton = $('<button class="dialog"></button>');
 	    
 	    $cancelButton.text(buttonOptions['Cancel'] || "Cancel");
 	    $confirmButton.text(buttonOptions['Confirm'] || "Confirm");
