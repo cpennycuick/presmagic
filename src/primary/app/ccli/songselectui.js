@@ -37,7 +37,7 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 		    }
 		});
 		
-		this._setLoadState('loading');
+		//this._setLoadState('loading');
 		
 	};
 	
