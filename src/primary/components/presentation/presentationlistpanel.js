@@ -5,7 +5,7 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 
 	var template = new app.Template(templateHTML);
 	var $oItem = template.get('PresentationListItem').find('li');
-
+	
 	var c = function ($container, options, parentPanel) {
 		parent.constructor.call(this, $container, {
 			Layout: 'Standard'
@@ -212,11 +212,25 @@ define(['app/tool/actionset', 'text!components/presentation/presentation.html'],
 	
 	c.prototype._launchSongSelectSearch = function() {
 		var self = this;
-		app.loadPanel('app/ccli/songselectui', $('#Content'))
+		var options = {
+			Observers : [self.onImport.bind(this)]
+		}
+		app.loadPanel('app/ccli/songselectui', $('#Content'), '', options)
 		.then(function (panel) {
 			panel._itemListReference = self;
 			panel.run();
 		}).done();
+	}
+	
+	/**
+	 * Observer function, passed to any function which may result in a song import
+	 * Should be called when a song is imported
+	 * Updates the presentation list and local data structure
+	 */
+	c.prototype.onImport = function(item) {
+	    console.log("on import");
+	    this._list.push(item);
+	    this._updateList();
 	}
 
 	return c;
