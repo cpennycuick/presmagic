@@ -3,14 +3,14 @@ define(function () {
 	var parentClass = app.Component;
 	var parent = parentClass.prototype;
 
-	var c = function () {
+	var c = function PresentationComponent () {
 		parent.constructor.call(this, 'Presentation');
 	};
 
 	c.prototype = new parentClass();
 
-	c.prototype.getInfo = function () {
-		return this.buildInfo('0.2', ['Chris; @cpennycuick'],
+	c.prototype._defineInfo = function () {
+		return this._buildInfo('0.2',
 			'This is the presentation component which provides all functionality relating to presentations.'
 		);
 	};

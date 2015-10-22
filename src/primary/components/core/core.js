@@ -3,14 +3,14 @@ define(function () {
 	var parentClass = app.Component;
 	var parent = parentClass.prototype;
 
-	var c = function () {
+	var c = function CoreComponent () {
 		parent.constructor.call(this, 'Core');
 	};
 
 	c.prototype = new parentClass();
 
-	c.prototype.getInfo = function () {
-		return this.buildInfo('0.1', ['Chris; @cpennycuick'],
+	c.prototype._defineInfo = function () {
+		return this._buildInfo('0.1',
 			'This is the core component which adds all the base features to the application.'
 		);
 	};
@@ -29,7 +29,7 @@ define(function () {
 	};
 
 	function addToMainMenu(menu) {
-		
+
 		menu.add('Output', 80, function () {
 			this.add('Output Controls', function () {
 				this.add('Toggle Output Window', null, function () {
@@ -43,7 +43,7 @@ define(function () {
 					}
 
 					output.visible = !output.visible;
-					
+
 				});
 			});
 		});

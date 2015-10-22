@@ -30,7 +30,7 @@ define(['text!components/core/componentslist.html'], function (templateHTML) {
 
 		var $oRow = template.get('ComponentsListRow', 'tr');
 
-		app.components.forEach(function (component) {
+		app.components.getAll().forEach(function (component) {
 			var $row = $oRow.clone();
 
 			var info = component.getInfo();
