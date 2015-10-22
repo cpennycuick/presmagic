@@ -33,14 +33,14 @@ define(function () {
 
 		if (!this.matches(selection)) {
 			this._selection = selection;
-			this._triggerChange();
+			this.triggerChange();
 		}
 	};
 
 	app.ItemSelection.prototype.addToSelection = function (single) {
 		if (!this.isSelected(single)) {
 			this._selection.push(single);
-			this._triggerChange();
+			this.triggerChange();
 		}
 	};
 
@@ -48,10 +48,10 @@ define(function () {
 		if (this.isSelected(single)) {
 			var index = this._selection.indexOf(single);
 			this._selection.splice(index, 1);
-			this._triggerChange();
+			this.triggerChange();
 		}
 	};
-	
+
 	app.ItemSelection.prototype.toggleSelected = function (index) {
 		if(this.isSelected(index)) {
 			this.removeFromSelection(index);
@@ -87,7 +87,7 @@ define(function () {
 		return this;
 	};
 
-	app.ItemSelection.prototype._triggerChange = function () {
+	app.ItemSelection.prototype.triggerChange = function () {
 		for (var i in this._updateFns) {
 			var selection = Array.prototype.slice.call(this._selection);
 			this._updateFns[i](selection);
