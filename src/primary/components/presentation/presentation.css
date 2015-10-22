@@ -94,7 +94,7 @@
 	border-right-color: #F22;
 }*/
 .Presentation.SearchBox {
-	width: 260px;
+	width: -webkit-calc(100% - 35px);
 	height: 20px;
     margin-left: 5px;    
     margin-top: 5px;

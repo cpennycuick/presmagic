@@ -1,4 +1,8 @@
-define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanelStyle.css', 'app/ccli/songselectapi', 'app/ccli/LyricViewer'], 
+define(['text!app/ccli/CCLISearchTemplate.html', 
+        'app/ccli/songselectapi', 
+        'app/ccli/LyricViewer',
+        'style!app/ccli/CCLISearchPanelStyle.css'],
+        
         function (templateHTML) {
 
 	var parentClass = app.Panel;
@@ -6,22 +10,30 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 
 	var template = new app.Template(templateHTML);
 
-	var _searchlist = []; //filled by the _populateList function after a search is carried out
+	var _searchlist = []; //filled by the _populateList function after a search is carried out	
+	var _importObservers = []; //observers to be notified when an item is imported
 	
-	var _itemListReference; //reference to the item list panel which opened the song search dialog.
 	
-	var c = function ($container) {
+	var SongSelectUI = function ($container, options) {
 		parent.constructor.call(this, $container, {
 			Layout: 'Dialog',
 			LayoutOptions: {
 				title: 'Search SongSelect',
 			}
-		});
+		});	
+		this._importObservers = options['Observers'] || [];
 	};
+	
+	SongSelectUI.LOADING = 'loading';
+	SongSelectUI.LOGGED_OUT = 'loggedout';
+	SongSelectUI.LOGGED_IN = 'loggedin';
+	SongSelectUI.INVALID_LOGIN = 'invalidlogin';
+	SongSelectUI.CANCEL_LOGIN = 'cancellogin';
+	SongSelectUI.CONNECTION_ERROR = 'connection';
 
-	c.prototype = new parentClass();
+	SongSelectUI.prototype = new parentClass();
 
-	c.prototype._prepare = function () {
+	SongSelectUI.prototype._prepare = function () {
 		parent._prepare.call(this);
 		//songSelectLogout(); used for testing since login is persistent
 		template.get('CCLISearchPanel')
@@ -37,20 +49,18 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 		    }
 		});
 		
-		//this._setLoadState('loading');
+		
 		
 	};
 	
 	//loading = loading gif, false = removes load states
-	c.prototype._setLoadState = function(loadState) {
+	SongSelectUI.prototype._setLoadState = function(loadState) {
 	    var self = this;
 	    self._clearList();
 	    var $listDiv = self.$('#ccli-list-div');
 	    switch(loadState) {
-	    	case 'loading':	    	    
-	    	    $loading = $(
-	    		"<div class='Loading'><img class='LoadingImg' src='/resources/712.gif'></img></div>"
-	    	    );
+	    	case SongSelectUI.LOADING:	    	    
+	    	    $loading = template.get('LoadingDiv');
 	    	    $listDiv.append($loading);
 	    	    console.log("Set loading state")
 	    	    break;
@@ -60,43 +70,46 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 	}
 	
 	//TODO: Make this code prettier, implement login user/pass prompt.
-	c.prototype._errorState = function(error) {
-	    	console.log('Error');
+	SongSelectUI.prototype._errorState = function(error) {
 		var self = this;
 		var $listDiv = self.$('#ccli-list-div');
+		
 		switch(error) {
-			case 'loggedout':				
+			case SongSelectUI.LOGGED_OUT:				
 			    this._songSelectLogin();
-			    break;
-			case 'loggedin': //We were logged out and just logged back in successfully!
+			break;
+			    
+			case SongSelectUI.LOGGED_IN: //We were logged out and just logged back in successfully!
 				this._songSelectSearch();
-				console.log("Logged in!");
-			    break;
-			case 'invalidlogin':
+			break;
+			    
+			case SongSelectUI.INVALID_LOGIN:
 				self._clearList();
 				$listDiv.addClass("ErrorDiv");
 				$listDiv.append("Invalid username/password :(<br>");
 				$listDiv.append("<div class='ErrorIcon icon icon-sad'></div>");
-				break;
-			case 'cancellogin':
+			break;
+				
+			case SongSelectUI.CANCEL_LOGIN:
 				self._clearList();
 				$listDiv.addClass("ErrorDiv");
 				$listDiv.append("You need to log in to search song select<br>");
 				$listDiv.append("<div class='ErrorIcon icon icon-sad'></div>");
-			    break;
-			case 'connection': //fall through to default
+			break;
+			    
+			case SongSelectUI.CONNECTION_ERROR: //fall through to default
 			default:
 				self._clearList();
 				$listDiv.addClass("ErrorDiv");
 				$listDiv.append("Failed to load search results :(<br>");
 				$listDiv.append("Check your connection status and try again");
 				$listDiv.append("<div class='ErrorIcon icon icon-sad'></div>");
-				break;
+			break;
 		}
 
 	};
 	
-	c.prototype._songSelectLogin = function() {
+	SongSelectUI.prototype._songSelectLogin = function() {
 	    	var self = this;
 		var opts = {
 			Title: 'Log in to SongSelect', 
@@ -121,20 +134,20 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 			function(result) {		
 				songSelectLogin(result['Username'], result['Password']).then(
 					function() {
-					    self._errorState('loggedin');
+					    self._errorState(SongSelectUI.LOGGED_IN);
 					}, 	
         				function(error) {
-					    self._errorState('invalidlogin');
+					    self._errorState(SongSelectUI.INVALID_LOGIN);
         				}
 				);
 			},function(error) {
-			    self._errorState('cancellogin');
+			    self._errorState(SongSelectUI.CANCEL_LOGIN);
 			}
 		);
 	}
 	
 
-	c.prototype._songSelectSearch = function() {
+	SongSelectUI.prototype._songSelectSearch = function() {
 		var self = this;
 		var $listDiv = self.$('#ccli-list-div');
 		var $searchbox = self.$("#ccli-search-box");
@@ -142,7 +155,7 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 		//var page
 		
 		if (searchTerms.length > 0) {
-		    self._setLoadState('loading');
+		    self._setLoadState(SongSelectUI.LOADING);
 		    songSelectSearch(searchTerms, 1/* page */).then(function(rez) {
 			self._setLoadState(false);
 			self._populateList(rez);
@@ -155,10 +168,11 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 
 	};
 	
-	c.prototype._populateList = function(searchresults) {
+	SongSelectUI.prototype._populateList = function(searchresults) {
 		var $oRow = template.get('CCLIListItem');
 		var $list = this.$('.CCLIList');
 		var self = this;
+		
 		for(var i = 0; i < searchresults.length; i++) {
 			_searchlist[i] = searchresults[i];
 			var $newItem = $oRow.clone();
@@ -193,7 +207,7 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 		$list.show();
 	};
 	
-	c.prototype._clearList = function() {
+	SongSelectUI.prototype._clearList = function() {
 		this.$('#ccli-list-div')
 				.empty()
 				.removeClass()
@@ -204,59 +218,96 @@ define(['text!app/ccli/CCLISearchTemplate.html', 'style!app/ccli/CCLISearchPanel
 	}
 	
 	
-	c.prototype._previewSong = function(songsearchdata) {
+	SongSelectUI.prototype._previewSong = function(songsearchdata) {
 	    var self = this;
+	    songsearchdata.previewLyrics().then(function(lyrics) {
+	
+		self._launchLyricViewer(songsearchdata, lyrics)
+		
+	    }, function (error) {
+		self._errorState(error);
+	    });		
+	}
+	
+	SongSelectUI.prototype._launchLyricViewer = function(songsearchdata, lyrics) {
+	    var self = this;
+	    var songTitle = songsearchdata.getName();
 	    var opts = {
 		    title: 'Preview',
 		    buttons : [{
 			text: 'Import',
 			action: function() {
-			   var opts =  {
+			   var opts2 =  {
 				Title : 'Confirm import',
-				Text : 'Import ' + songsearchdata.getName() + "?"
+				Text : 'Import ' + songTitle + "?"
 			    }
-			    app.promptPanel(this, opts).then(function(resolved) {
+			    app.promptPanel(this, opts2).then(function(resolved) {
 				self._importSong(songsearchdata);
-			    });
-			    
+			    });			    
 			    
 			}
-		    }]
+		    }],
+		    songTitle: songTitle,
+		    songLyrics: lyrics
 	    	}
 		app.loadPanel('app/ccli/LyricViewer', $('#Content'), '', opts)
 		.then(function (panel) {
-			panel.searchdata = songsearchdata;
 			panel.run();
 		}).done();
 	}
 	
-	//Needs rewrite, just temporary
-	c.prototype._importSong = function(songsearchdata) {
-		var self = this;
-		songsearchdata.import().then(function(cclisong){
+	//TODO: Needs rewrite, just temporary
+	SongSelectUI.prototype._importSong = function(songsearchdata) {
+	    var self = this;
 
-			app.db.transaction('rw', [app.db.presentation, app.db.frame], function () {
-				
-				var item = {Name: cclisong.getTitle()};
+	    songsearchdata.import().then(function(cclisong) {
 
-				app.db.presentation.add(item).then(function (id) {
+		var item = {
+			Name: cclisong.getTitle()
+		};
 
-					item.ID = id;
-					self._itemListReference._list.push(item);
-					self._itemListReference._updateList();
+		app.db.transaction('rw', [app.db.presentation, app.db.frame], function () {
 
-					var words = cclisong.getWords();
-					
-					for (var key in words) {
-						var text = words[key].join("\n");
-						app.db.frame.add({PresentationID: id, Text: text});
-					}
-				});	//add error handler	
 
-			});
-		}, function(error) {
-			console.log("Error importing song " + error);
+
+		    app.db.presentation.add(item).then(function (id) {
+
+
+			var words = cclisong.getWords();
+			item.ID = id;
+
+			for (var key in words) {
+			    var text = words[key].join("\n");
+			    app.db.frame.add({PresentationID: id, Text: text});
+			}
+
+		    });
+
+		}).then(function() {
+		    self._notifyImportObservers(item);
+		}).catch(function(error) {
+		    self._errorState(error);
 		});
+	    }, function(error) {
+		self._errorState(error);
+	    });
+
+	}	
+	
+	/**
+	 * Notifies all import observers, passed through in the 'Options' object (Options[Observers])
+	 * The item {Name: SongName, ID : databaseID} is passed to each of these
+	 */
+	SongSelectUI.prototype._notifyImportObservers = function(item) {
+	    var i = 0,
+	    	length = this._importObservers.length;
+	    for(i; i < length; i++) {
+		console.log(i);
+		if(typeof this._importObservers[i] === "function") {
+		    this._importObservers[i](item);
+		}		
+	    }
 	}
-	return c;
+	
+	return SongSelectUI;
 });

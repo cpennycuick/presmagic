@@ -1,6 +1,6 @@
 define(['app/ccli/ccliconverter'], function () {
 
-		const SONG_SELECT_DOMAIN = "https://au.songselect.com/";
+	const SONG_SELECT_DOMAIN = "https://au.songselect.com/";
 	
 	/*
 	 * Returns a promise object which resolves when logged in successfully, or rejects when there is any failure to log in
@@ -150,26 +150,28 @@ define(['app/ccli/ccliconverter'], function () {
 	SongSearchResult.prototype.getLocation = function() {
 		return this._location || "";
 	}
-	
+
 	SongSearchResult.prototype.import = function() {
-		var self = this;
-		return new Promise(function(resolve, reject) {
-			console.log("Importing " + self._name);	
-			var path = SONG_SELECT_DOMAIN + self._location.replace("viewlyrics", "lyrics/downloadusr");
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', path, true);
-			xhr.onload = function() {
-			  if (this.status == 200) {
-				  resolve(getCCLISong(xhr.responseText));			 
-			  } else {
-				  reject(Error("connection"));
-			  }
-			};
-			xhr.send();
-		});
-			
+	    var self = this;
+	    
+	    return new Promise(function(resolve, reject) {
+
+		var path = SONG_SELECT_DOMAIN + self._location.replace("viewlyrics", "lyrics/downloadusr");
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', path, true);
+		xhr.onload = function() {
+		    if (this.status == 200) {
+			resolve(getCCLISong(xhr.responseText));			 
+		    } else {
+			reject(Error("connection"));
+		    }
+		};
+		xhr.send();
+
+	    });
+
 	};
-	
+
 	SongSearchResult.prototype.previewLyrics = function() {
 		var self = this;
 		return new Promise(function(resolve, reject) {

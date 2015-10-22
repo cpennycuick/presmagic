@@ -33,7 +33,8 @@ define(function () {
 					return attribute.split(splitter);
 				}				
 			}
-			throw new Error("Key: " + key + "not found");	
+			return[];
+			//throw new Error("Key: " + key + "not found");	
 		}
 		
 		
