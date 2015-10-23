@@ -291,7 +291,7 @@
         	    
     		this._frames.push(item);
     		this._updateFrames();
-    		self._setPresentationEdited();
+    		this._setPresentationEdited();
 
             };
         
