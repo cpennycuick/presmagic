@@ -256,8 +256,8 @@ define(['text!app/ccli/CCLISearchTemplate.html',
 	
 	//TODO: Needs rewrite, just temporary
 	SongSelectUI.prototype._importSong = function(songsearchdata) {
-	    var self = this;
-
+	    var self = this,
+	    	frameIndex = 0;
 	    songsearchdata.import().then(function(cclisong) {
 
 		var item = {
@@ -273,10 +273,10 @@ define(['text!app/ccli/CCLISearchTemplate.html',
 
 			var words = cclisong.getWords();
 			item.ID = id;
-
+			
 			for (var key in words) {
 			    var text = words[key].join("\n");
-			    app.db.frame.add({PresentationID: id, Text: text});
+			    app.db.frame.add({PresentationID: id, Text: text, FrameIndex: frameIndex++});
 			}
 
 		    });
