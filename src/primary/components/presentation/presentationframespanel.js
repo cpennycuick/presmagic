@@ -48,12 +48,15 @@ define([
 
 		var $frames = this.$('.Frames');
 		
-		var $actions = this.$('.Actions');
+		var $actions = this.getContainer().find('.Actions');
+		
 		$('body').on('click.FramesPanel', function (event) {
 			if (!$.contains($frames[0], event.target)
 					&& !$.contains($actions[0], event.target)
 					&& $actions[0] !== event.target
-					&& !self._selection.isSelectionEmpty()) {
+					&& !self._selection.isSelectionEmpty()
+					&& !$.contains()
+			) {
 				self._selection.clearSelection();
 			}
 		}).on('keydown.FramesPanel', function (event) {
@@ -61,15 +64,7 @@ define([
 				keys[event.which] = true;
 				if (event.ctrlKey && event.which === 65) { // CTRL + A
 					self._selection.setSelection.apply(self._selection, Object.keys(self._frames));
-/*					songSelectLogout().then(function() {
-						songSelectLogin("info@rcbc.org.au", "rcbcmedia").then(function(loginResult) {
-							console.log("Successfully logged in as: " + loginResult);
-						}, function(error){
-							console.log("Failed login! " + error);
-						});
-					}); //testing
 
-*/
 
 				} else if (event.which === 27) { // ESC
 					self._selection.clearSelection();
@@ -108,33 +103,59 @@ define([
 			var $this = $(this);
 			var index = $this.attr('data-index');
 
+
 			if (event.shiftKey) {
 			    self._selection.toggleSelected(index);
 				return; //no actions except toggle selected with the shift key
-			}
+			}	
 			//single frame selected, we can make it active
 			if (self._selection.isSelected(index) && self._selection.isSingleSelection()) {
-				self._toggleActive(index);
+			    	self._toggleActive(index);
+				
 			}
 			self._selection.setSelection(index);
 			return;
 		});
 
-		$("#editframe").click(function() {
-			var frame = self._selection.getSingleSelection();
+		$("#editframe").click(function(event) {
+		    	event.preventdefault;
+		    		    	
+			var frameIdx = self._selection.getSingleSelection();
 
-			if (!frame) {
+			if (!frameIdx) {
 				return; // Return if no frame is selected, or multiple frames are selected
 			}
 
-			self._setFrameText(frame, "This has been edited");
+			self._openEditorDialog(frameIdx);
+			//self._setFrameText(frame, "This has been edited");
 		});
 
-		$("#deleteframe").click(function() {
+		$("#deleteframe").click(function(event) {
+		    	event.preventdefault;
 			idxs = self._selection.getSelection();
 			self._removeFrames(idxs);
 		});
+		
+		$("#frameleft").click(function(event) {
+		    	event.preventdefault;
+			var frameIdx = self._selection.getSingleSelection();
+			if (!frameIdx) {
+				return; // Return if no frame is selected, or multiple frames are selected
+			}
+			if(!self._shiftFrame(frameIdx, 'left')) {
+			    self._selection.setSelection(frameIdx);
+			}
+		});
 
+		$("#frameright").click(function(event) {
+		    	event.preventdefault;
+			var frameIdx = self._selection.getSingleSelection();
+			if (!frameIdx) {
+			    return; // Return if no frame is selected, or multiple frames are selected
+			}
+			self._shiftFrame(frameIdx, 'right');
+		});
+		
 		app.event.bind(app.EVENT_PRESENTATION_CHANGED, function (data) {
 			if (data.PresentationID) {
 				app.db.frame
@@ -244,6 +265,29 @@ define([
 	c.prototype._removeFrame = function (index) {
 		this._removeFrames([index]);
 	};
+	
+	c.prototype._shiftFrame = function(frameIdx, direction) {
+	    var newIndex = 0;
+	    var frameslength = this._frames.length;
+	    
+	    switch (direction) {
+	    case 'left':
+		if(frameIdx == 0) return false; //already left most position
+		newIndex = frameIdx - 1;
+		break;
+	    case 'right':
+		if(frameIdx == frameslength - 1) return false;//already right most position
+		newIndex = frameIdx - -1;
+		break;
+	    default:
+		return false;
+	    }
+	    this._frames.splice(newIndex, 0, this._frames.splice(frameIdx, 1)[0]);
+	    this._updateFrames();
+	    this._selection.setSelection(newIndex);
+	    return true;
+	}
+	
 
 	c.prototype._setFrameText = function (index, text) {
 		if (!(index in this._frames)) {
@@ -258,6 +302,29 @@ define([
 			self._updateFrames();
 		});
 	};
+	
+	c.prototype._openEditorDialog = function(frameIdx) {
+	    var self = this;
+	    var deferred = Q.defer();
+	    var opts = {
+		    Layout: 'EditorPanel',
+		    LayoutOptions: {
+			    Promise: deferred,
+			    InitialText: self._frames[frameIdx].Text
+		    }
+	    }
+	    app.loadPanel('app/panel', $('#Content'), this, opts).then(function(panel) {
+		panel.run();
+	    }, function(error) {
+		deferred.reject('panelload');
+	    });
+	    
+	    deferred.promise.then(function(newText) {
+		self._setFrameText(frameIdx, newText);
+	    }, function(cancelled) {
+		return;
+	    });
+	}
 
 	return c;
 });

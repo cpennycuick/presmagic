@@ -49,8 +49,6 @@ define(['text!app/ccli/CCLISearchTemplate.html',
 		    }
 		});
 		
-		
-		
 	};
 	
 	//loading = loading gif, false = removes load states
@@ -62,7 +60,6 @@ define(['text!app/ccli/CCLISearchTemplate.html',
 	    	case SongSelectUI.LOADING:	    	    
 	    	    $loading = template.get('LoadingDiv');
 	    	    $listDiv.append($loading);
-	    	    console.log("Set loading state")
 	    	    break;
 	    	default:
 	    	    break;
@@ -104,6 +101,7 @@ define(['text!app/ccli/CCLISearchTemplate.html',
 				$listDiv.append("Failed to load search results :(<br>");
 				$listDiv.append("Check your connection status and try again");
 				$listDiv.append("<div class='ErrorIcon icon icon-sad'></div>");
+				console.log(error);
 			break;
 		}
 
@@ -302,7 +300,6 @@ define(['text!app/ccli/CCLISearchTemplate.html',
 	    var i = 0,
 	    	length = this._importObservers.length;
 	    for(i; i < length; i++) {
-		console.log(i);
 		if(typeof this._importObservers[i] === "function") {
 		    this._importObservers[i](item);
 		}		
