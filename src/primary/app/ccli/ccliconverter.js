@@ -51,7 +51,6 @@ define(function () {
 			var fields = this.getFields();
 			var fieldContents = getAttributeByKey("Words", "/t");
 			var result = [];
-			console.log(fields.length + ", " + fieldContents.length)
 			for(var i = 0; i < fields.length; i++) {
 				result[fields[i]] = fieldContents[i].split("/n");
 			}

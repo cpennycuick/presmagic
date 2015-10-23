@@ -7,9 +7,7 @@ define(['app/layouts/standard'], function (layoutStandard) {
 		this._$cloak = $();
 		this._$buttons = $();
 		this._options = options;
-		for(var key in options) {
-		    console.log(key + ": " + options[key]);
-		}
+
 	};
 	c.prototype = new layoutStandard();
 

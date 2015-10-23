@@ -85,7 +85,6 @@ define(['app/layouts/standard', 'style!app/layouts/InputDialog.css'], function (
 		    //Highlight field red if no text
 		    //
 		    var $field = this._$inputs.find("[data-index='" + this._inputs[i].index + "']");
-		    console.log($field.val());
 		    var value = $field.val();
 		    if(value.length < 1 && this._inputs[i].Compulsory) {
 			//Highlight field red

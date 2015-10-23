@@ -23,7 +23,6 @@ define(['app/ccli/ccliconverter'], function () {
 						data.append("RememberMe", "false");					
 						var loginRequest = new XMLHttpRequest();
 						loginRequest.onload = function() {
-							console.log("Received response");
 							if (loginRequest.readyState == 4 && loginRequest.status == 200) {
 								if(loginRequest.responseText.indexOf("Please enter a valid username/password") == -1) {								
 									var $loggedInHtml = $(loginRequest.responseText);			
@@ -79,7 +78,6 @@ define(['app/ccli/ccliconverter'], function () {
 				if(request.readyState == 4 && request.status == 200) {
 					var $HTMLResults = $(request.responseText);
 					if(!loggedIn($HTMLResults)) {
-						console.log("Rejecting :(");
 						reject("loggedout");
 						return;
 					}
@@ -175,7 +173,6 @@ define(['app/ccli/ccliconverter'], function () {
 	SongSearchResult.prototype.previewLyrics = function() {
 		var self = this;
 		return new Promise(function(resolve, reject) {
-			console.log("Previewing " + self._name);
 			var path = SONG_SELECT_DOMAIN + self._location;
 			var xhr = new XMLHttpRequest();
 			xhr.open('GET', path, true);

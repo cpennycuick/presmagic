@@ -1,0 +1,4 @@
+.Dialog .EditorPanel {
+	width: -webkit-calc(100% - 6px);
+	height:400px;
+}
