@@ -68,7 +68,8 @@ define(['app/tool/actionset',
 	    }
 
 	    var index = $this.attr('data-index');
-	    console.log("Index " + index);
+	    
+	    
 	    this._activePresentationID = this._list[index].ID;
 
 	    app.event.trigger(app.EVENT_PRESENTATION_CHANGED, {
@@ -84,7 +85,7 @@ define(['app/tool/actionset',
 		var $this = $(event.target);
 		var $selectedLI = $this.closest('li');
 		var index = $selectedLI.attr('data-index');
-		console.log($this.attr('data-action'));
+		
 		switch ($this.attr('data-action')) {
 			case 'Delete':
 				this._removeItemIndex(index);
@@ -172,7 +173,7 @@ define(['app/tool/actionset',
 								$this.siblings(".Text").text(newtext); //change the text only if the database is also changed
 								self._list[index].Name = newtext;
 							}).catch(function(error) {
-								console.log("Failed to edit song name");
+								
 								console.log(error);
 							});							
 						}						
@@ -196,7 +197,7 @@ define(['app/tool/actionset',
 	 * Updates the presentation list and local data structure
 	 */
 	c.prototype.onImport = function(item) {
-	    console.log("on import");	    
+	    	    
 	    this._addItem(new SongListItem(item.Name, item.ID));
 	}
 
