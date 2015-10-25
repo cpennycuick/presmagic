@@ -6,8 +6,8 @@
         
             "use strict";
             
-            var parentClass = app.Panel;
-            var parent = parentClass.prototype;
+            var ParentClass = app.Panel;
+            var parent = ParentClass.prototype;
         
             var template = new app.Template(templateHTML);
             var $oSlide = template.get('PresentationFrame');
@@ -20,7 +20,7 @@
         	this._activeFrame = null;
             };
         
-            c.prototype = new parentClass();
+            c.prototype = new ParentClass();
         
             c.prototype._prepare = function () {
         	var self = this;
@@ -55,10 +55,10 @@
         	var $actions = this.getContainer().find('.Actions');
         
         	$('body').on('click.FramesPanel', function (event) {
-        	    if (!$.contains($frames[0], event.target)
-        		    && !$.contains($actions[0], event.target)
-        		    && $actions[0] !== event.target
-        		    && !self._selection.isSelectionEmpty()
+        	    if (!$.contains($frames[0], event.target) && 
+        		    !$.contains($actions[0], event.target) &&
+        		    $actions[0] !== event.target && 
+        		    !self._selection.isSelectionEmpty()
         	    ) {
         		self._selection.clearSelection();
         	    }
@@ -72,7 +72,7 @@
         		} else if (event.which === 27) { // ESC
         		    self._selection.clearSelection();
         		} else if (event.which === 39) { // RIGHT
-        		    var selection = this._selection.getSingleSelection()
+        		    var selection = this._selection.getSingleSelection();
         		    if ((selection !== false) && parseInt(selection) < self._frames.length - 1) {
         			selection = parseInt(selection) + 1;
         			self._selection.setSelection(selection);
@@ -101,7 +101,7 @@
         	});
         
         	this.getContainer().on('click', '.Frame', function (event) {
-        	    event.preventDefault;
+        	    event.preventDefault();
         
         	    var $this = $(this);
         	    var index = $this.attr('data-index');
@@ -121,7 +121,7 @@
         	});
         
         	$("#editframe").click(function(event) {
-        	    event.preventdefault;
+        	    event.preventDefault();
         
         	    var frameIdx = self._selection.getSingleSelection();
         
@@ -135,13 +135,13 @@
         
 
         	$("#deleteframe").click(function(event) {
-        	    event.preventdefault;
+        	    event.preventDefault();
         	    var idxs = self._selection.getSelection();
         	    self._removeFrames(idxs);
         	});
         
         	$("#frameleft").click(function(event) {
-        	    event.preventdefault;
+        	    event.preventDefault();
         	    var frameIdx = self._selection.getSingleSelection();
         	    if (!frameIdx) {
         		return; // Return if no frame is selected, or multiple frames are selected
@@ -152,7 +152,7 @@
         	});
         
         	$("#frameright").click(function(event) {
-        	    event.preventdefault;
+        	    event.preventDefault();
         	    var frameIdx = self._selection.getSingleSelection();
         	    if (!frameIdx) {
         		return; // Return if no frame is selected, or multiple frames are selected
@@ -193,8 +193,8 @@
         			    self._updateFrames();
         	        	    self._selection.clearSelection();
         	        	    self._presentationID = data.PresentationID;
-        			})
-        		    })        		    
+        			});
+        		    });        		    
         		} else {
         		    app.db.frame
         		    .where('PresentationID')
@@ -257,7 +257,7 @@
         	for(i; i < length; i++) {
         	    this._frames[i].FrameIndex = i;
         	}
-            }
+            };
         
             c.prototype._updateFrames = function () {
         	this._updateFrameIndices();        	
@@ -315,7 +315,7 @@
         	}
         	this._setPresentationEdited();
         	this._updateFrames();
-            }
+            };
         
             c.prototype._removeFrame = function (index) {
         	this._removeFrames([index]);
@@ -335,7 +335,7 @@
         	
         	app.db.transaction('rw', app.db.frame, function() {
         	    for(let i = 0; i < length; i++) {
-        		if(frames[i].ID == undefined) {
+        		if(frames[i].ID === undefined) {
         		    app.db.frame.add(frames[i]).then(function(id) {
         			self._frames[i].ID = id;
         		    });
@@ -371,15 +371,15 @@
         	    deferred.reject(error);
         	});
         	return deferred.promise;
-            }
+            };
             
             c.prototype._onSaveSuccess = function() {
         	console.log("Saved like a boss");
-            }
+            };
             
             c.prototype._onSaveFail = function(error) {
         	console.log("Save failed: " + error);
-            }
+            };
         
             c.prototype._setPresentationEdited = function() {
         	if(!this._presentationEdited) {
@@ -387,7 +387,7 @@
         	    this.getContainer().find("#framesave")
         	    	.css({color:'black'});
         	}        		
-            }
+            };
             
             c.prototype._shiftFrame = function(frameIdx, direction) {
         	var newIndex = 0;
@@ -400,7 +400,7 @@
         	    break;
         	case 'right':
         	    if(frameIdx == frameslength - 1) return false;//already right most position
-        	    newIndex = frameIdx - -1;
+        	    newIndex = frameIdx - -1; //TODO: It thinks frameIdx is a STRING so 1 + 1 = 11 :( Not sure where this originates. 
         	    break;
         	default:
         	    return false;
@@ -410,8 +410,7 @@
         	this._updateFrames();
         	this._selection.setSelection(newIndex);
         	return true;
-            }
-        
+            };
         
             c.prototype._setFrameText = function (index, text) {
         	if (!(index in this._frames)) {
@@ -432,10 +431,9 @@
 				    	Cancel : "Don't save",
         				Confirm: "Save"
 				}
-			    	}
+			    	};
         	app.promptPanel(this, options).then(function(resolved) {
         	       self._saveFrames().then(function() {
-        		console.log("save frames returned true")
         	       def.resolve();
         	   }, function(error) {
         	       def.resolve();
@@ -443,11 +441,11 @@
         	   });        	    
         	   
         	}, function(rejected) {
-        	    console.log("rejected save" + rejected)
+        	    console.log("rejected save" + rejected);
         	    def.resolve();
-        	})
+        	});
         	return def.promise;
-            }
+            };
             
             c.prototype._openEditorDialog = function(frameIdx) {
         	var self = this;
@@ -458,7 +456,7 @@
         		    Promise: deferred,
         		    InitialText: self._frames[frameIdx].Text
         		}
-        	}
+        	};
         	app.loadPanel('app/panel', $('#Content'), this, opts).then(function(panel) {
         	    panel.run();
         	}, function(error) {
@@ -471,7 +469,7 @@
         	}, function(cancelled) {
         	    return;
         	});
-            }
+            };
         
             return c;
         });

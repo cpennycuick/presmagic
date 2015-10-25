@@ -27,8 +27,8 @@
 	padding: 2px;
 }
 .Presentation.FramesPanel .Frame {
-	width: 140px;
-	height: 100px;
+	width: 180px;
+	height: 140px;
 	background-color: black;
 	border-radius: 2px;
 	display: inline-block;

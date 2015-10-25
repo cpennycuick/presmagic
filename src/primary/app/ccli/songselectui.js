@@ -66,7 +66,7 @@ define(['text!app/ccli/CCLISearchTemplate.html',
 	    }
 	}
 	
-	//TODO: Make this code prettier, implement login user/pass prompt.
+
 	SongSelectUI.prototype._errorState = function(error) {
 		var self = this;
 		var $listDiv = self.$('#ccli-list-div');
@@ -186,7 +186,7 @@ define(['text!app/ccli/CCLISearchTemplate.html',
 		}
 
 		$list.on('click', '.ActionIcon', function (event) {		
-			event.preventDefault;
+			event.preventDefault();
 			var $this = $(this);
 			var $selected = $this.closest('div');
 			var index = $selected.attr('data-index');
