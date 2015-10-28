@@ -120,7 +120,7 @@ define([
 		});
 
 		$("#deleteframe").click(function() {
-			idxs = self._selection.getSelection();
+			var idxs = self._selection.getSelection();
 			self._removeFrames(idxs);
 		});
 

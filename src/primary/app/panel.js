@@ -55,13 +55,16 @@ define(['app/layouts', 'app/mixin/eventmanager'], function (appLayouts, appMixin
 	app.Panel.prototype._setupLayout = function () {
 		var options = this._options;
 		var layoutClass = appLayouts[options.Layout];
-		this._layout = new layoutClass(this._$root, options.LayoutOptions);
-
+		this._layout = new layoutClass(this._$root, options.LayoutOptions, this._close.bind(this));
 		this._layout.wrap();
 	};
 
 	app.Panel.prototype._prepare = function () {
 
+	};
+
+	app.Panel.prototype._close = function () {
+		this._layout && this._layout._close();
 	};
 
 	app.Panel.prototype.$ = function (selector) {

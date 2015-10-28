@@ -1,15 +1,18 @@
 define([
 	'app/layouts/standard',
-	'app/layouts/dialog'],
+	'app/layouts/dialog',
+	'app/layouts/confirmdialog'],
 	function (
 		layoutStandard,
-		layoutDialog
+		layoutDialog,
+		layoutConfirmDialog
 	) {
 
 	var layouts = {};
 
 	layouts.Standard = layoutStandard;
 	layouts.Dialog = layoutDialog;
+	layouts.ConfirmDialog = layoutConfirmDialog;
 
 	return layouts;
 

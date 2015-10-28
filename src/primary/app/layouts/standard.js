@@ -1,6 +1,6 @@
 define(function () {
 
-	var c = function ($root, options) {
+	var c = function StandardLayout ($root, options) {
 		this._$root = $root || $();
 		this._options = options || {};
 

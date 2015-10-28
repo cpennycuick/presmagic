@@ -32,6 +32,23 @@ define(function () {
 			});
 	};
 
+	app.openDialog = function (name, parent, $container) {
+		$container = $container || $(document.body);
+
+		return requireOneDeferred(name)
+			.then(function (panelClass) {
+				return new panelClass($container, {}, parent);
+			});
+	};
+
+	app.confirm = function (message) {
+		return app.openDialog('app/panels/confirmation')
+			.then(function (panel) {
+				panel.setMessage(message);
+				panel.run();
+			});
+	};
+
 	var setup = {
 		init: function () {
 			return this._loadClasses()
