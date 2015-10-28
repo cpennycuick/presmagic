@@ -13,6 +13,11 @@ define(function () {
 		frame: "++ID,PresentationID,Group,Text"
 	});
 
+	
+	app.db.version(2).stores({
+		presentation: "++ID,Name",
+		frame: "++ID,PresentationID,Group,Text,FrameIndex"
+	});
 	app.db.open();
 
 //	app.db.transaction('rw', [app.db.presentation, app.db.frame], function () {

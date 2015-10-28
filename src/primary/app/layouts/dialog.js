@@ -4,9 +4,10 @@ define(['app/layouts/standard'], function (layoutStandard) {
 
 	var c = function ($root, options) {
 		layoutStandard.prototype.constructor.call(this, $body, options);
-
 		this._$cloak = $();
 		this._$buttons = $();
+		this._options = options;
+
 	};
 	c.prototype = new layoutStandard();
 

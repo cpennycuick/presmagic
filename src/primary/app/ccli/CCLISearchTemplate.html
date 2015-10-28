@@ -1,0 +1,39 @@
+
+<div data-template="CCLISearchPanel">
+    <div>
+    	<input type="Text" id="ccli-search-box" class="CCLISearchBox" placeholder="Enter song name or artist"></input>
+    	<span class="CCLISearchIcon icon icon-search" id="ccli-search-button"></span>
+    	<hr class = "BlackHR">
+    	<div class='CCLISearchSummary'></div>
+    	<div id="ccli-list-div" class='CCLIListContainer'>
+    		<ul class="CCLIList">
+    		</ul>
+    	</div>    	
+    </div>    
+</div>
+
+<div data-template="CCLIListItem">
+	<li class="CCLIListResult">
+		<span class="ActionIcon icon icon-download2" data-action="import" style="float:right"></span>
+		<span class="ActionIcon icon icon-eye" data-action="preview" style="float:right"></span>
+		<div class="Authors"></div>
+		<div class="Catalogs"></div>
+	</li>
+</div>
+
+<div data-template="LyricViewer" class="LyricViewDiv">
+<div class= "LyricViewSongTitle">
+</div>
+<div class= "LyricViewSongContent">
+
+</div>
+</div>
+
+<div data-template="LoadingDiv" class="Loading">
+<div class="sk-folding-cube">
+  <div class="sk-cube1 sk-cube"></div>
+  <div class="sk-cube2 sk-cube"></div>
+  <div class="sk-cube4 sk-cube"></div>
+  <div class="sk-cube3 sk-cube"></div>
+</div>
+</div>

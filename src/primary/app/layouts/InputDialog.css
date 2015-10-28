@@ -1,0 +1,22 @@
+.DialogInputs {
+	
+}
+
+input.DialogInput {
+    width: -webkit-calc(100% - 10px);
+    height: 20px;
+    font-size: 18px;
+    padding: 5px 0px 5px 0px;
+    margin: 6px 0px 2px 3px;
+}
+
+input.DialogInput:hover {
+	background-color:lightyellow;
+}
+input.RedBackground {
+	background-color:#ff8080;
+}
+
+input.RedBackground::-webkit-input-placeholder {
+color: #000000!important;
+}

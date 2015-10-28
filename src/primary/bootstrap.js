@@ -4,11 +4,12 @@ requirejs.config({
 		text: '/vendor/requirejs/module/text-2.0.13',
 		style: '/vendor/requirejs/module/css-0.1.8',
 
-		'DI': '/src/displayinstructions',
-
+		'DI': '/src/displayinstructions',		
 		'Dexie': '/vendor/dexie/dexie-1.0.4.min',
 		'jQuery': '/vendor/jquery/jquery-2.1.3.min',
-		'Q': '/vendor/q/q-1.4.1'
+		'Q': '/vendor/q/q-1.4.1',
+		'tipped' : '/vendor/tipped/js/tipped/tipped',
+		
 	},
 	shim: {
 		'Dexie': {
@@ -17,23 +18,33 @@ requirejs.config({
 	}
 });
 
-requirejs(['jQuery', 'Q', 'Dexie', 'app', 'startup', 'style!primary', 'style!icons'], function (jquery, Q, Dexie, app, startup) {
+requirejs(['jQuery', 'Q', 'Dexie', 'tipped', 'app', 'startup', 'style!primary', 'style!icons'], function (jquery, Q, Dexie, tipped, app, startup) {
 //	window.Dexie = Dexie;
 	window.Q = Q;
 	window.app = app;
+	window.tipped = tipped;
 
 	// TODO is this the right place?
-	Q.longStackSupport = true;
+	Q.longStackSupport = false;
+	Q.longStackJumpLimit = 0;	
 	Q.onerror = function (e) {
 		console.error('Q.onerror', e, e.stack);
 	};
-
+	loadCSS('/vendor/tipped/css/tipped/tipped.css');
 	startup();
 });
 
 requirejs(['DI'], function () {
 	console.log(window.DI);
 });
+
+window.loadCSS = function(url) {
+    var link = document.createElement("link");
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    link.href = url;
+    document.getElementsByTagName("head")[0].appendChild(link);
+}
 
 // TODO is this the right place / right way?
 window.requireOneDeferred = function (dep) {

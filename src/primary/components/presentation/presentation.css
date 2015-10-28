@@ -27,8 +27,8 @@
 	padding: 2px;
 }
 .Presentation.FramesPanel .Frame {
-	width: 140px;
-	height: 100px;
+	width: 180px;
+	height: 140px;
 	background-color: black;
 	border-radius: 2px;
 	display: inline-block;
@@ -94,7 +94,7 @@
 	border-right-color: #F22;
 }*/
 .Presentation.SearchBox {
-	width: 260px;
+	width: -webkit-calc(100% - 35px);
 	height: 20px;
     margin-left: 5px;    
     margin-top: 5px;
