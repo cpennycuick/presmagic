@@ -5,20 +5,19 @@
 	font-size:initial;
 	border:none;
 	outline:none;
-	
 }
 .Dialog {
 	max-height:600px;
 	max-width:550px;
 }
 .Dialog .DialogContent {
-	max-height: 580px
-	max-width:545px;
+	max-height: 580px;
+	max-width: 545px;
 }
 
 .BlackHR {
 	border-width: 2px;
-    border-color:black;
+	border-color:black;
 }
 
 .CCLISearchIcon {
@@ -30,60 +29,60 @@
 
 .CCLISearchIcon:hover {
 	background-color: #32D2FF;
-    border-color: #32D2FF;
+	border-color: #32D2FF;
 }
 
 .CCLISearchIcon:active {
 	background-color: #00A4D2;
-    border-color: #00A4D2;
+	border-color: #00A4D2;
 }
 
 .SpinnerDiv {
-	
+
 	min-width:100%;
 	min-height:450px;
 	position:relative;
 }
 
 .CCLIList {
-    list-style-type: none;
-    padding:5px;
+	list-style-type: none;
+	padding:5px;
 }
 
-.CCLIListResult {    
-   
-    border-left: 4px solid;
-    border-color: #000066;
-    color: #000066;
-    border-radius:5px;
-    padding: 5px 10px 5px 15px;
-    margin:3px;
-    background-color:#E9E9E9;
-    font-size:20px;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    font-weight:400;
+.CCLIListResult {
+
+	border-left: 4px solid;
+	border-color: #000066;
+	color: #000066;
+	border-radius:5px;
+	padding: 5px 10px 5px 15px;
+	margin:3px;
+	background-color:#E9E9E9;
+	font-size:20px;
+	font-family: 'Segoe UI', Tahoma, sans-serif;
+	font-weight:400;
 }
 
 .CCLIListResult .Authors {
-    font-size:14px;    
-    padding:2px 0px 4px 0px;
-    color:black;
-    font-weight:normal;
+	font-size:14px;
+	padding:2px 0px 4px 0px;
+	color:black;
+	font-weight:normal;
 }
 
 .CCLIListResult .Catalogs {
-    font-style:italic;
-    font-size:12px;
-    color:black;
-    font-weight:normal;
+	font-style:italic;
+	font-size:12px;
+	color:black;
+	font-weight:normal;
 }
 
 .CCLIListResult .ActionIcon {
 	color:black;
 	padding: 0px 5px 5px 5px;
-    border-radius: 20px;
-    border-width: 3px;
-  
+	border-radius: 20px;
+	border-width: 3px;
+
 }
 
 .CCLIListResult .ActionIcon:hover {
@@ -91,11 +90,11 @@
 }
 
 .CCLIListResult:hover {
-    background-color:grey;
+	background-color:grey;
 }
 
 .CCLISearchSummary {
-  overflow:hidden;    
+  overflow:hidden;
 }
 
 .CCLIListContainer {
@@ -176,7 +175,7 @@
 }
 .sk-folding-cube .sk-cube4 {
   -webkit-transform: scale(1.1) rotateZ(270deg);
-          
+
 }
 .sk-folding-cube .sk-cube2:before {
   -webkit-animation-delay: 0.3s;
@@ -192,15 +191,15 @@
 }
 @-webkit-keyframes sk-foldCubeAngle {
   0%, 10% {
-    -webkit-transform: perspective(140px) rotateX(-180deg);
-    opacity: 0; 
+	-webkit-transform: perspective(140px) rotateX(-180deg);
+	opacity: 0;
   } 25%, 75% {
-    -webkit-transform: perspective(140px) rotateX(0deg);
+	-webkit-transform: perspective(140px) rotateX(0deg);
 
-    opacity: 1; 
+	opacity: 1;
   } 90%, 100% {
-    -webkit-transform: perspective(140px) rotateY(180deg);
+	-webkit-transform: perspective(140px) rotateY(180deg);
 
-    opacity: 0; 
-  } 
+	opacity: 0;
+  }
 }

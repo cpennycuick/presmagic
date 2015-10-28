@@ -14,7 +14,7 @@ define(['app/layouts/standard', 'style!app/layouts/EditorPanel.css'], function (
 
 	c.prototype.wrap = function () {
 	
-	    this._$cloak = $('<div class="Cloak"></div>');
+		this._$cloak = $('<div class="Cloak"></div>');
 		
 		var $dialog = $(
 				'	<div class="Dialog">'+
@@ -44,25 +44,25 @@ define(['app/layouts/standard', 'style!app/layouts/EditorPanel.css'], function (
 	
 	//Adds two buttons : confirms and cancel.
 	c.prototype.addButtons = function(buttonOptions) {
-	    var self = this;
-	    var $cancelButton = $('<button class="dialog"></button>');
-	    var $confirmButton = $('<button class="dialog"></button>');
-	    
-	    $cancelButton.text(buttonOptions['Cancel'] || "Cancel");
-	    $confirmButton.text(buttonOptions['Confirm'] || "Confirm");
-	    
-	    
-	    $cancelButton.click(this.close.bind(this));
-	    $confirmButton.click(this.submit.bind(this));
-	    
-	    this._$buttons.append($confirmButton)
+		var self = this;
+		var $cancelButton = $('<button class="dialog"></button>');
+		var $confirmButton = $('<button class="dialog"></button>');
+		
+		$cancelButton.text(buttonOptions['Cancel'] || "Cancel");
+		$confirmButton.text(buttonOptions['Confirm'] || "Confirm");
+		
+		
+		$cancelButton.click(this.close.bind(this));
+		$confirmButton.click(this.submit.bind(this));
+		
+		this._$buttons.append($confirmButton)
 		.append($cancelButton);
 	}
 
-	c.prototype.submit = function() {	    
-	    var text = this._$editorpanel.val();
-	    this._$cloak.remove();
-	    this.deferredPromise.resolve(text);	   
+	c.prototype.submit = function() {		
+		var text = this._$editorpanel.val();
+		this._$cloak.remove();
+		this.deferredPromise.resolve(text);	   
 	}
 	
 	c.prototype.close = function () {

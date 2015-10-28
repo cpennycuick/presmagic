@@ -96,11 +96,11 @@
 .Presentation.SearchBox {
 	width: -webkit-calc(100% - 35px);
 	height: 20px;
-    margin-left: 5px;    
-    margin-top: 5px;
-    margin-bottom: 4px;
-    border:none;
-    outline:none
+	margin-left: 5px;	
+	margin-top: 5px;
+	margin-bottom: 4px;
+	border:none;
+	outline:none
 }
 
 .Presentation.ListPanel {
